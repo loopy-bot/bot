@@ -1,5 +1,5 @@
 import { WechatyBuilder } from "wechaty";
-import { WechatyWebPanelPlugin } from "wechaty-web-panel";
+import { startScheduledTasks } from "./modules/scheduledTasks/index.js";
 
 const name = "wechat-assistant-pro";
 let bot = "";
@@ -56,16 +56,7 @@ bot.on("login", (user) => {
 });
 
 // 监听消息事件
-
-bot
-  .on("message", async (message) => {
-    if (message.type() === bot.Message.Type.Text) {
-      // 检查消息是否提到了用户
-      if (await message.mentionSelf()) {
-        console.log(
-          "this message were mentioned me! [You were mentioned] tip ([有人@我]的提示)"
-        );
-      }
-    }
-  })
-  .start();
+bot.on("ready", async () => {
+  startScheduledTasks(bot);
+});
+bot.on("message", async (message) => {}).start();
