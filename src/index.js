@@ -1,5 +1,7 @@
 import { WechatyBuilder } from "wechaty";
 import { startScheduledTasks } from "./modules/scheduledTasks/index.js";
+import { sendMail } from "./utils/email.js";
+import { reply } from "./utils/openai.js";
 
 const name = "wechat-assistant-pro";
 let bot = "";
@@ -43,20 +45,44 @@ if (padLocalToken) {
     puppet: "wechaty-puppet-wechat4u",
   });
 }
-bot.on("scan", (qrcode, status) => {
-  console.log(
-    `Scan QR Code to login: ${status}\n\n\nhttps://wechaty.js.org/qrcode/${encodeURIComponent(
-      qrcode
-    )}`
-  );
-});
-
-bot.on("login", (user) => {
-  console.log(`User ${user} logged in`);
-});
-
-// 监听消息事件
-bot.on("ready", async () => {
-  startScheduledTasks(bot);
-});
-bot.on("message", async (message) => {}).start();
+bot
+  .on("scan", (qrcode, status) => {
+    console.log(
+      `Scan QR Code to login: ${status}\n\n\nhttps://wechaty.js.org/qrcode/${encodeURIComponent(
+        qrcode
+      )}`
+    );
+  })
+  .on("login", (user) => {
+    console.log(`User ${user} logged in`);
+  })
+  .on("ready", async () => {
+    startScheduledTasks(bot);
+  })
+  .on("logout", (user) => {
+    console.log(user);
+    sendMail("logout", `您的账户已经登出账户！`);
+  })
+  .on("error", (error) => {
+    console.log(error);
+  })
+  .on("message", async (message) => {
+    if (
+      message.type() === bot.Message.Type.Text &&
+      (await message.mentionSelf())
+    ) {
+      // 提取文本内容
+      const text = message
+        .text()
+        .replace(/@\S+\s/g, "")
+        .trim(); // 去除at部分
+      const data = await reply(text);
+      message.say(data);
+      // 处理引用消息
+      // const quote = message.quote();
+      // if (quote) {
+      //   console.log("收到一条引用并提到我的消息:", quote);
+      // }
+    }
+  })
+  .start();

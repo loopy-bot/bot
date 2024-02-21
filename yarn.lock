@@ -3553,6 +3553,11 @@ node-video-lib@^2.2.0:
   resolved "https://npm.corp.kuaishou.com/node-video-lib/-/node-video-lib-2.2.3.tgz#d23e1bc7a1619a5fe25b64bf17761ead02093031"
   integrity sha512-huIPORbstouMG71XL0Q2K6l5/9YSBBXpaG8A6NXqUUS9i7uTZKsC+4ekOhL1SdSCfdUrcL4h4gMakL4ljNcwzQ==
 
+nodemailer@^6.9.9:
+  version "6.9.9"
+  resolved "https://npm.corp.kuaishou.com/nodemailer/-/nodemailer-6.9.9.tgz#4549bfbf710cc6addec5064dd0f19874d24248d9"
+  integrity sha512-dexTll8zqQoVJEZPwQAKzxxtFn0qTnjdQTchoU6Re9BUUGBJiOy3YMn/0ShTW6J5M0dfQ1NeDeRTTl4oIWgQMA==
+
 nop@^1.0.0:
   version "1.0.0"
   resolved "https://npm.corp.kuaishou.com/nop/-/nop-1.0.0.tgz#cb46cf7e01574aa6390858149f66897afe53c9ca"
