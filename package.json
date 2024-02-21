@@ -1,0 +1,57 @@
+{
+  "name": "wechat-assistant",
+  "version": "4.6.23",
+  "description": "智能微秘书4.6.23",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "pm2": "pm2 start pm2.json",
+    "stop": "pm2 stop wechaty-pro",
+    "restart": "pm2 restart wechat-pro",
+    "start": "node index.js",
+    "office": "node src/office.js",
+    "engine": "node src/engine.js",
+    "test": "node src/index.template.js"
+  },
+  "author": "Leo_chen",
+  "license": "MIT",
+  "keywords": [
+    "wechaty1.x",
+    "wechaty",
+    "mongoose",
+    "微信机器人",
+    "微信助手",
+    "chatgpt",
+    "微秘书",
+    "智能机器人",
+    "对话机器人",
+    "node",
+    "js"
+  ],
+  "engines": {
+    "node": ">=16",
+    "npm": ">=7"
+  },
+  "dependencies": {
+    "sharp": "^0.33.2",
+    "wechaty": "^1.20.2",
+    "wechaty-puppet": "^1.21.1",
+    "wechaty-puppet-engine": "^1.0.25",
+    "wechaty-puppet-official-account": "^1.10.7",
+    "wechaty-puppet-padlocal": "^1.20.1",
+    "wechaty-puppet-service": "^1.18.2",
+    "wechaty-puppet-wechat4u": "^1.14.12",
+    "wechaty-web-panel": "^1.6.41"
+  },
+  "devDependencies": {
+    "pm2": "^4.2.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leochen-g/wechat-assistant-pro.git"
+  },
+  "bugs": {
+    "url": "https://github.com/leochen-g/wechat-assistant-pro/issues"
+  },
+  "homepage": "https://github.com/leochen-g/wechat-assistant-pro#readme"
+}
