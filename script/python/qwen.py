@@ -3,6 +3,7 @@ from http import HTTPStatus
 import dashscope
 import sys
 
+dashscope.api_key='sk-055423e7ed8f4db0b324b4cff3caafa4'
 def call_with_messages(prefix,prompt):
     messages = [
         {'role': 'user', 'content': prefix + prompt}]
