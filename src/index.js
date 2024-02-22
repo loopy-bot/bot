@@ -71,13 +71,13 @@ bot
       message.type() === bot.Message.Type.Text &&
       (await message.mentionSelf())
     ) {
-      // 提取文本内容
+      const contact = message.talker();
       const text = message
         .text()
         .replace(/@\S+\s/g, "")
         .trim(); // 去除at部分
       const data = await reply(text);
-      message.say(data);
+      message.say(`@${contact.name()} ${data}`);
       // 处理引用消息
       // const quote = message.quote();
       // if (quote) {

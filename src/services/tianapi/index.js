@@ -54,3 +54,8 @@ export const getHoroscope = () => {
     astro: "taurus",
   }).then((res) => res.result.list);
 };
+
+// 生活小段子
+export const getLifeStory = () => {
+  return request("get", "/mnpara/index").then((res) => res.result.content);
+};
