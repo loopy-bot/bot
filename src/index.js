@@ -1,7 +1,7 @@
 import { WechatyBuilder } from "wechaty";
 import { startScheduledTasks } from "./modules/scheduledTasks/index.js";
 import { sendMail } from "./utils/email.js";
-import { reply } from "./utils/openai.js";
+import { reply } from "./modules/AI/index.js";
 
 const name = "wechat-assistant-pro";
 let bot = "";

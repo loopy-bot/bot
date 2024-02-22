@@ -63,6 +63,11 @@
   resolved "https://npm.corp.kuaishou.com/@eslint/js/-/js-8.56.0.tgz#ef20350fec605a7f7035a01764731b2de0f3782b"
   integrity sha512-gMsVel9D7f2HLkBma9VbtzZRehRogVRfbr++f06nL2vnCGCNlzOD+/MUov/F4p8myyAHspEhVobgjpX64q5m6A==
 
+"@google/generative-ai@^0.2.1":
+  version "0.2.1"
+  resolved "https://npm.corp.kuaishou.com/@google/generative-ai/-/generative-ai-0.2.1.tgz#29e5e7fb9379413fdac6da42d22f86c2f9ecc078"
+  integrity sha512-gNmMFadfwi7qf/6M9gImgyGJXY1jKQ/de8vGOqgJ0PPYgQ7WwzZDavbKrIuXS2zdqZZaYtxW3EFN6aG9x5wtFw==
+
 "@grpc/grpc-js@^1.2.3", "@grpc/grpc-js@^1.3.7":
   version "1.10.1"
   resolved "https://npm.corp.kuaishou.com/@grpc/grpc-js/-/grpc-js-1.10.1.tgz#be450560c990c08274bc19d514e181ea205ccaa8"
@@ -3621,6 +3626,13 @@ object-keys@^1.1.1:
   resolved "https://npm.corp.kuaishou.com/object-keys/-/object-keys-1.1.1.tgz#1c47f272df277f3b1daf061677d9c82e2322c60e"
   integrity sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA==
 
+ollama@^0.4.6:
+  version "0.4.6"
+  resolved "https://npm.corp.kuaishou.com/ollama/-/ollama-0.4.6.tgz#f23e4dfb5464665fee9f4336d89826fb81190b1a"
+  integrity sha512-/Im2atcM9hAxOgEi7mc5pG2G+MeN4jFo1bubfCzAd8bZT6nQ3he5tr+jypGufau9+WQKY0MHhTajqKTNfnlZQA==
+  dependencies:
+    whatwg-fetch "^3.6.20"
+
 omggif@^1.0.10, omggif@^1.0.9:
   version "1.0.10"
   resolved "https://npm.corp.kuaishou.com/omggif/-/omggif-1.0.10.tgz#ddaaf90d4a42f532e9e7cb3a95ecdd47f17c7b19"
@@ -5304,6 +5316,11 @@ wechaty@^1.20.2:
     wechaty-puppet-wechat4u "^1.11.1"
     wechaty-token "^1.1.1"
     ws "^8.5.0"
+
+whatwg-fetch@^3.6.20:
+  version "3.6.20"
+  resolved "https://npm.corp.kuaishou.com/whatwg-fetch/-/whatwg-fetch-3.6.20.tgz#580ce6d791facec91d37c72890995a0b48d31c70"
+  integrity sha512-EqhiFU6daOA8kpjOWTL0olhVOF3i7OrFzSYiGsEMB8GcXS+RrzauAERX65xMeNWVqxA6HXH2m69Z9LaKKdisfg==
 
 whatwg-url@^5.0.0:
   version "5.0.0"

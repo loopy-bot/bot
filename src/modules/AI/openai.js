@@ -1,7 +1,8 @@
 import OpenAI from "openai";
+import { OPENAI_KEY } from "../../../config.js";
 
 const openai = new OpenAI({
-  apiKey: "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",
+  apiKey: OPENAI_KEY,
 });
 
 export async function reply(prefix, content) {
