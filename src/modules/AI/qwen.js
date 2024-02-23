@@ -66,11 +66,11 @@ export const chat = () => {
           });
         });
 
-        return (text) =>
+        return (text, key) =>
           new Promise((resolve, reject) => {
             ws.once("message", resolve);
             ws.once("error", reject);
-            ws.send(text);
+            ws.send(JSON.stringify({ text, key }));
           });
       } catch (e) {
         await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -84,3 +84,41 @@ export const chat = () => {
   startPythonScript();
   return connectWebSocket(); // No need for the extra setTimeout or Promise wrapper
 };
+
+const mockChat = await chat();
+
+// 消息队列处理逻辑
+const messageQueues = {};
+
+async function processNext(roomId) {
+  if (messageQueues[roomId] && messageQueues[roomId].length > 0) {
+    const { text } = messageQueues[roomId][0]; // 取出队列中第一条消息
+    const response = await mockChat(text, roomId);
+    const data = JSON.parse(response);
+    console.log(`房间 ${roomId}，消息：${text}，回复：${data.response}`);
+    console.log(roomId + "-" + text);
+    messageQueues[roomId].shift(); // 处理完毕后移除队列中的该消息
+    if (messageQueues[roomId].length) {
+      await processNext(roomId); // 如果队列中还有消息，则继续处理下一条
+    }
+  }
+}
+
+function enqueueMessage(roomId, text) {
+  if (!messageQueues[roomId]) {
+    messageQueues[roomId] = [];
+  }
+
+  messageQueues[roomId].push({ text });
+
+  if (messageQueues[roomId].length === 1) {
+    processNext(roomId); // 如果是队列中的第一条消息，则立即处理
+  }
+}
+
+// 测试代码
+enqueueMessage("room1", "1 + 1");
+enqueueMessage("room3", "2 + 2");
+enqueueMessage("room2", "3 + 3");
+enqueueMessage("room4", "4 + 4");
+console.log(messageQueues);
