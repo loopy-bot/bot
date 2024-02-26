@@ -50,7 +50,7 @@ export async function startScheduledTasks(bot) {
 
   // 中午十二点的任务
   schedule.scheduleJob("0 12 * * *", async () => {
-    const data = AI.reply("来一段中午十二点的问好", "情感丰富点");
+    const data = await AI.reply("来一段中午十二点的问好", "情感丰富点");
     const roomList = await bot.Room.findAll(); // 获取所有群聊
     for (let room of roomList) {
       try {
@@ -63,7 +63,7 @@ export async function startScheduledTasks(bot) {
 
   // 下午两点的任务
   schedule.scheduleJob("0 14 * * *", async () => {
-    const data = AI.reply("来一段下午二点的问好", "情感丰富点");
+    const data = await AI.reply("来一段下午二点的问好", "情感丰富点");
     const roomList = await bot.Room.findAll(); // 获取所有群聊
     for (let room of roomList) {
       try {
@@ -75,8 +75,8 @@ export async function startScheduledTasks(bot) {
   });
 
   // 晚上八点的任务
-  schedule.scheduleJob("0 20 * * *", async () => {
-    const data = AI.reply("来一段晚上八点的问好", "情感丰富点");
+  schedule.scheduleJob("30 20 * * *", async () => {
+    const data = await AI.reply("来一段晚上八点的问好", "情感丰富点");
     const roomList = await bot.Room.findAll(); // 获取所有群聊
     for (let room of roomList) {
       try {
@@ -89,7 +89,7 @@ export async function startScheduledTasks(bot) {
 
   // 晚上十一点的任务
   schedule.scheduleJob("0 23 * * *", async () => {
-    const data = AI.reply("来一段晚上十一点的问好", "情感丰富点");
+    const data = await AI.reply("来一段晚上十一点的问好", "情感丰富点");
     const roomList = await bot.Room.findAll(); // 获取所有群聊
     for (let room of roomList) {
       try {
