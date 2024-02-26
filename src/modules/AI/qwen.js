@@ -28,7 +28,7 @@ export const reply = (prefix, prompt) => {
 export const chat = () => {
   let retryCount = 0;
   const maxRetries = 10;
-
+  const responseHandlers = {};
   const startPythonScript = () => {
     const pythonProcess = spawn(python, ["script/python/qwenws.py"]);
     pythonProcess.stdout.on("data", (data) => {
@@ -56,7 +56,7 @@ export const chat = () => {
   const connectWebSocket = async () => {
     while (retryCount < maxRetries) {
       try {
-        const ws = new WebSocket("ws://localhost:8765");
+        ws = new WebSocket("ws://localhost:8765");
         await new Promise((resolve, reject) => {
           ws.on("open", resolve);
           ws.on("error", (e) => {
@@ -64,12 +64,19 @@ export const chat = () => {
             ws.close();
             reject(e);
           });
+          ws.on("message", (res) => {
+            const data = JSON.parse(res);
+            const handler = responseHandlers[data.key];
+            if (handler) {
+              handler(data); // 调用对应 key 的解析函数
+              delete responseHandlers[data.key]; // 移除已调用的解析函数
+            }
+          });
         });
 
         return (text, key) =>
           new Promise((resolve, reject) => {
-            ws.once("message", resolve);
-            ws.once("error", reject);
+            responseHandlers[key] = resolve; // 存储解析函数以便稍后调用
             ws.send(JSON.stringify({ text, key }));
           });
       } catch (e) {
@@ -84,41 +91,3 @@ export const chat = () => {
   startPythonScript();
   return connectWebSocket(); // No need for the extra setTimeout or Promise wrapper
 };
-
-const mockChat = await chat();
-
-// 消息队列处理逻辑
-const messageQueues = {};
-
-async function processNext(roomId) {
-  if (messageQueues[roomId] && messageQueues[roomId].length > 0) {
-    const { text } = messageQueues[roomId][0]; // 取出队列中第一条消息
-    const response = await mockChat(text, roomId);
-    const data = JSON.parse(response);
-    console.log(`房间 ${roomId}，消息：${text}，回复：${data.response}`);
-    console.log(roomId + "-" + text);
-    messageQueues[roomId].shift(); // 处理完毕后移除队列中的该消息
-    if (messageQueues[roomId].length) {
-      await processNext(roomId); // 如果队列中还有消息，则继续处理下一条
-    }
-  }
-}
-
-function enqueueMessage(roomId, text) {
-  if (!messageQueues[roomId]) {
-    messageQueues[roomId] = [];
-  }
-
-  messageQueues[roomId].push({ text });
-
-  if (messageQueues[roomId].length === 1) {
-    processNext(roomId); // 如果是队列中的第一条消息，则立即处理
-  }
-}
-
-// 测试代码
-enqueueMessage("room1", "1 + 1");
-enqueueMessage("room3", "2 + 2");
-enqueueMessage("room2", "3 + 3");
-enqueueMessage("room4", "4 + 4");
-console.log(messageQueues);

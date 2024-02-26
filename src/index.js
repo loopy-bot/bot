@@ -1,44 +1,39 @@
 import { WechatyBuilder } from "wechaty";
 import { startScheduledTasks } from "./modules/scheduledTasks/index.js";
 import { sendMail } from "./utils/email.js";
-import { chat } from "./modules/AI/qwen.js";
+import { chat } from "./modules/AI/index.js";
 
-const name = "wechat-assistant-pro";
+const messageQueues = {};
 const reply = await chat();
-let bot = "";
 
-// 每个群聊的消息队列映射
-const messageQueues = new Map();
-
-// 处理队列中的下一条消息
-async function processNext(roomId) {
-  if (!messageQueues.has(roomId) || messageQueues.get(roomId).length === 0) {
-    return;
-  }
-
-  const queue = messageQueues.get(roomId);
-  const { message, contact } = queue[0];
-
-  let res = await reply(message.text(), roomId);
-  while (res === "Error occurred") {
-    console.log("AI error, retrying...");
-    res = await reply(message.text(), roomId);
-  }
-  queue.shift();
-  console.log(`回答内容为：${res}`);
-
-  if (message.room()) {
-    await message.say(`@${contact.name()} ${res}`);
-  } else {
-    await message.say(res);
-  }
-
-  // 如果队列中还有消息，继续处理下一条
-  if (queue.length > 0) {
-    processNext(roomId);
+async function processNext(roomId, callback) {
+  if (messageQueues[roomId] && messageQueues[roomId].length > 0) {
+    const { text } = messageQueues[roomId][0]; // 取出队列中第一条消息
+    const response = await reply(text, roomId);
+    callback(response.response);
+    messageQueues[roomId].shift(); // 处理完毕后移除队列中的该消息
+    if (messageQueues[roomId].length) {
+      await processNext(roomId); // 如果队列中还有消息，则继续处理下一条
+    } else {
+      delete messageQueues[roomId];
+    }
   }
 }
 
+function enqueueMessage(roomId, text, callback) {
+  if (!messageQueues[roomId]) {
+    messageQueues[roomId] = [];
+  }
+
+  messageQueues[roomId].push({ text });
+
+  if (messageQueues[roomId].length === 1) {
+    processNext(roomId, callback); // 如果是队列中的第一条消息，则立即处理
+  }
+}
+
+let name = "wechat-assistant-pro";
+let bot = "";
 bot = WechatyBuilder.build({
   name, // generate xxxx.memory-card.json and save login data for the next login
   puppet: "wechaty-puppet-wechat4u",
@@ -66,21 +61,17 @@ bot
   })
   .on("message", async (message) => {
     if (await message.mentionSelf()) {
-      const room = await message.room(); // 获取群聊信息
+      const room = await message.room();
       const roomId = room ? room.id : "personal";
       const contact = message.talker();
+      const text = message
+        .text()
+        .replace(/@\S+\s/g, "")
+        .trim(); // 去除at部分
 
-      if (!messageQueues.has(roomId)) {
-        messageQueues.set(roomId, []);
-      }
-
-      // 将消息添加到对应群聊的队列中
-      messageQueues.get(roomId).push({ message, contact });
-
-      // 如果队列长度为1，立即处理消息，否则，它将在前一条消息处理完毕后被处理
-      if (messageQueues.get(roomId).length === 1) {
-        processNext(roomId);
-      }
+      enqueueMessage(roomId, text, (data) => {
+        message.say(`@${contact.name()}\n${data}`);
+      });
     }
   })
   .start();

@@ -15,7 +15,7 @@ def call_with_messages(key, message):
     # 确保每个key都有自己的消息列表
     if key not in messages_dict:
         messages_dict[key] = []
-
+    
     # 获取当前key的消息列表
     messages = messages_dict[key]
 
@@ -24,6 +24,7 @@ def call_with_messages(key, message):
         messages.pop(0)
 
     messages.append({'role': 'user', 'content': message})
+   
     response = dashscope.Generation.call(
         dashscope.Generation.Models.qwen_max,
         messages=messages,
@@ -33,7 +34,7 @@ def call_with_messages(key, message):
     
     if response.status_code == HTTPStatus.OK:
         output_message = response.output.choices[0]['message']['content']
-        messages.append({'role': 'bot', 'content': output_message})
+        messages.append({'role': 'assistant', 'content': output_message})
         # 更新字典中的消息队列
         messages_dict[key] = messages
         return output_message  # 假设响应内容是JSON格式
@@ -49,10 +50,17 @@ async def handle_model_interaction(websocket, path):
         data = json.loads(message)
         text = data['text']
         key = data['key']
-        # 调用模型处理函数，并传递key和text
-        response = call_with_messages(key, text)
-     
-        await websocket.send(json.dumps({'key': key, 'response': response}))
+
+        # 将消息发送到处理队列
+        await process_message(key, text, websocket)
+
+async def process_message(key, text, websocket):
+    loop = asyncio.get_running_loop()
+    # 在线程池中执行同步的 call_with_messages 函数
+    response = await loop.run_in_executor(None, call_with_messages, key, text)
+    print(response)
+    # 发送响应回客户端
+    await websocket.send(json.dumps({'key': key, 'response': response}))
 
 start_server = websockets.serve(handle_model_interaction, "localhost", 8765)
 

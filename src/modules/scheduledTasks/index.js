@@ -35,13 +35,9 @@ export const processData = async () => {
 };
 
 export async function startScheduledTasks(bot) {
-  console.log("开启定时任务！");
-  let data = "";
-  schedule.scheduleJob("0 0 8 * * *", async () => {
-    data = await processData();
-  });
   schedule.scheduleJob("0 0 9 * * *", async () => {
     // 每天早上9点执行
+    const data = await processData();
     const roomList = await bot.Room.findAll(); // 获取所有群聊
     for (let room of roomList) {
       try {
@@ -51,4 +47,57 @@ export async function startScheduledTasks(bot) {
       }
     }
   });
+
+  // 中午十二点的任务
+  schedule.scheduleJob("0 12 * * *", async () => {
+    const data = AI.reply("来一段中午十二点的问好", "情感丰富点");
+    const roomList = await bot.Room.findAll(); // 获取所有群聊
+    for (let room of roomList) {
+      try {
+        await room.say(data); // 发送消息
+      } catch (e) {
+        console.error(`Error: ${e.message}`);
+      }
+    }
+  });
+
+  // 下午两点的任务
+  schedule.scheduleJob("0 14 * * *", async () => {
+    const data = AI.reply("来一段下午二点的问好", "情感丰富点");
+    const roomList = await bot.Room.findAll(); // 获取所有群聊
+    for (let room of roomList) {
+      try {
+        await room.say(data); // 发送消息
+      } catch (e) {
+        console.error(`Error: ${e.message}`);
+      }
+    }
+  });
+
+  // 晚上八点的任务
+  schedule.scheduleJob("0 20 * * *", async () => {
+    const data = AI.reply("来一段晚上八点的问好", "情感丰富点");
+    const roomList = await bot.Room.findAll(); // 获取所有群聊
+    for (let room of roomList) {
+      try {
+        await room.say(data); // 发送消息
+      } catch (e) {
+        console.error(`Error: ${e.message}`);
+      }
+    }
+  });
+
+  // 晚上十一点的任务
+  schedule.scheduleJob("0 23 * * *", async () => {
+    const data = AI.reply("来一段晚上十一点的问好", "情感丰富点");
+    const roomList = await bot.Room.findAll(); // 获取所有群聊
+    for (let room of roomList) {
+      try {
+        await room.say(data); // 发送消息
+      } catch (e) {
+        console.error(`Error: ${e.message}`);
+      }
+    }
+  });
+  console.log("开启定时任务！");
 }

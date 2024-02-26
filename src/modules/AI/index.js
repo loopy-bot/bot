@@ -8,4 +8,10 @@ export const createAI = (mode = AI_MODAL) => {
   if (mode === "gemini") return gemini.reply;
   if (mode === "qwen") return qwen.reply;
 };
+
+export const createChat = (mode = AI_MODAL) => {
+  if (mode === "qwen") return qwen.chat;
+};
+
 export const reply = createAI();
+export const chat = createChat();
