@@ -34,70 +34,106 @@ export const processData = async () => {
   return `【今日天气】\n--${weather}\n\n【黄历】\n--${almanac}\n\n【星座运势】\n--${horoscope}\n\n【今日新闻】\n${news}\n\n【心灵鸡汤】\n--${lifestory}`;
 };
 
-export async function startScheduledTasks(bot) {
-  schedule.scheduleJob("0 0 9 * * *", async () => {
-    // 每天早上9点执行
-    const data = await processData();
-    const roomList = await bot.Room.findAll(); // 获取所有群聊
+function initRoomTask(bot) {
+  // 抽象出发送消息的函数
+  async function sendMessageToAllRooms(bot, message) {
+    const roomList = await bot.Room.findAll();
     for (let room of roomList) {
       try {
-        await room.say(data); // 发送消息
+        await room.say(`@所有人\n${message}`);
       } catch (e) {
         console.error(`Error: ${e.message}`);
       }
     }
-  });
+  }
 
-  // 中午十二点的任务
-  schedule.scheduleJob("0 12 * * *", async () => {
-    const data = await AI.reply("来一段中午十二点的问好", "情感丰富点");
-    const roomList = await bot.Room.findAll(); // 获取所有群聊
-    for (let room of roomList) {
-      try {
-        await room.say(data); // 发送消息
-      } catch (e) {
-        console.error(`Error: ${e.message}`);
-      }
-    }
-  });
+  // 抽象出任务调度函数
+  async function scheduleMessage(bot, cronString, messageFunc) {
+    schedule.scheduleJob(cronString, async () => {
+      const message = await messageFunc();
+      await sendMessageToAllRooms(bot, message);
+    });
+  }
+  async function createScheduleTask(bot, cronString, prefix, prompt) {
+    scheduleMessage(
+      bot,
+      cronString,
+      async () => await AI.reply(prefix, prompt)
+    );
+  }
 
-  // 下午两点的任务
-  schedule.scheduleJob("0 14 * * *", async () => {
-    const data = await AI.reply("来一段下午二点的问好", "情感丰富点");
-    const roomList = await bot.Room.findAll(); // 获取所有群聊
-    for (let room of roomList) {
-      try {
-        await room.say(data); // 发送消息
-      } catch (e) {
-        console.error(`Error: ${e.message}`);
-      }
-    }
-  });
+  const tasks = [
+    {
+      cronTime: "0 12 * * *",
+      prefix: "来一段中午十二点的问好，提醒吃饭",
+      prompt: "面对群友，情感丰富，但是简洁一点",
+    },
+    {
+      cronTime: "0 14 * * *",
+      prefix: "来一段下午二点的问好",
+      prompt: "面对群友，情感丰富，但是简洁一点",
+    },
+    {
+      cronTime: "0 18 * * *",
+      prefix: "来一段下午六点的问好，提醒吃饭",
+      prompt: "面对群友，情感丰富，但是简洁一点",
+    },
+    {
+      cronTime: "30 20 * * *",
+      prefix: "来一段晚上八点的问好",
+      prompt: "面对群友，情感丰富，但是简洁一点",
+    },
+    {
+      cronTime: "0 23 * * *",
+      prefix: "来一段晚上十一点的问好",
+      prompt: "面对群友，情感丰富，但是简洁一点",
+    },
+  ];
 
-  // 晚上八点的任务
-  schedule.scheduleJob("30 20 * * *", async () => {
-    const data = await AI.reply("来一段晚上八点的问好", "情感丰富点");
-    const roomList = await bot.Room.findAll(); // 获取所有群聊
-    for (let room of roomList) {
-      try {
-        await room.say(data); // 发送消息
-      } catch (e) {
-        console.error(`Error: ${e.message}`);
-      }
-    }
-  });
-
-  // 晚上十一点的任务
-  schedule.scheduleJob("0 23 * * *", async () => {
-    const data = await AI.reply("来一段晚上十一点的问好", "情感丰富点");
-    const roomList = await bot.Room.findAll(); // 获取所有群聊
-    for (let room of roomList) {
-      try {
-        await room.say(data); // 发送消息
-      } catch (e) {
-        console.error(`Error: ${e.message}`);
-      }
-    }
-  });
+  scheduleMessage(bot, "0 0 9 * * *", async () => await processData());
+  tasks.forEach((i) => createScheduleTask(bot, i.cronTime, i.prefix, i.prompt));
   console.log("开启定时任务！");
+}
+function initPersonTask(bot) {
+  // 用户配置
+  const userConfigs = [
+    {
+      name: "lay13234816528", // 用户的ID或标识符
+      message: "开始学习了嗷", // 要发送的消息内容
+      cronTime: "0 0 9 * * *", // 每天早上9点执行
+    },
+    {
+      name: "lay13234816528", // 用户的ID或标识符
+      message: "今天学了些什么呢？", // 要发送的消息内容
+      cronTime: "0 0 21 * * *", // 每天早上9点执行
+    },
+  ];
+
+  // 发送消息的函数
+  async function sendMessageToUser(bot, name, message) {
+    try {
+      const contact = await bot.Contact.find({
+        name,
+      });
+      if (contact) {
+        await contact.say(message);
+      } else {
+        console.error("未找到指定用户");
+      }
+    } catch (e) {
+      console.error(`Error: ${e.message}`);
+    }
+  }
+  // 定时任务
+  userConfigs.forEach((userConfig) => {
+    schedule.scheduleJob(userConfig.cronTime, () => {
+      sendMessageToUser(bot, userConfig.name, userConfig.message);
+    });
+  });
+
+  console.log("开启单人消息定时任务！");
+}
+export async function startScheduledTasks(bot) {
+  initRoomTask(bot);
+  initPersonTask(bot);
 }
