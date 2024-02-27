@@ -1,4 +1,5 @@
 import { exec, spawn } from "child_process";
+import iconv from "iconv-lite";
 import WebSocket from "ws";
 
 let python;
@@ -14,12 +15,16 @@ export const reply = (prefix, prompt) => {
   return new Promise((resolve, reject) => {
     exec(
       `${python} script/python/qwen.py "${prefix}" '${prompt}'`,
+      { encoding: "buffer" },
       (err, stdout, stderr) => {
         if (err) {
           reject(err);
           return;
         }
-        resolve(JSON.parse(stdout).output.choices[0].message.content);
+        resolve(
+          JSON.parse(iconv.decode(stdout, "gbk"))?.output?.choices[0]?.message
+            .content
+        );
       }
     );
   });

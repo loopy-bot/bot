@@ -52,8 +52,7 @@ bot
   .on("ready", async () => {
     startScheduledTasks(bot);
   })
-  .on("logout", (user) => {
-    console.log(user);
+  .on("logout", () => {
     sendMail("logout", `您的账户已经登出账户！`);
   })
   .on("error", (error) => {

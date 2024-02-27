@@ -13,7 +13,7 @@ export const processData = async () => {
 
   [weather, news, almanac, horoscope] = await Promise.all([
     AI.reply(
-      "请解析以下内容，并提取数据，简练总结出一段话。回复需要生动一点，不要机器化",
+      "请解析以下内容，并提取天气主要信息，简练总结出一段话，不要超过30个字。回复需要生动一点，不要机器化",
       JSON.stringify(weather)
     ),
 
@@ -22,19 +22,19 @@ export const processData = async () => {
       JSON.stringify(news)
     ),
     AI.reply(
-      "请解析以下内容，并提取数据，简练总结出一段话。回复需要生动一点，不要机器化",
+      "请解析以下内容，并提取主要信息，简练总结出一段话，不要超过40个字。回复需要生动一点，不要机器化",
       JSON.stringify(almanac)
     ),
 
     AI.reply(
-      "请解析以下内容，并提取数据，简练总结出一段话。回复需要生动一点，不要机器化",
+      "请解析以下内容，并提取主要信息，简练总结出一段话。回复需要生动一点，不要机器化",
       JSON.stringify(horoscope)
     ),
   ]);
   return `【今日天气】\n--${weather}\n\n【黄历】\n--${almanac}\n\n【星座运势】\n--${horoscope}\n\n【今日新闻】\n${news}\n\n【心灵鸡汤】\n--${lifestory}`;
 };
 
-function initRoomTask(bot) {
+async function initRoomTask(bot) {
   // 抽象出发送消息的函数
   async function sendMessageToAllRooms(bot, message) {
     const roomList = await bot.Room.findAll();
@@ -79,13 +79,8 @@ function initRoomTask(bot) {
       prompt: "面对群友，情感丰富，但是简洁一点",
     },
     {
-      cronTime: "30 20 * * *",
-      prefix: "来一段晚上八点的问好",
-      prompt: "面对群友，情感丰富，但是简洁一点",
-    },
-    {
       cronTime: "0 23 * * *",
-      prefix: "来一段晚上十一点的问好",
+      prefix: "来一段晚上十一点的晚安问好",
       prompt: "面对群友，情感丰富，但是简洁一点",
     },
   ];
@@ -93,18 +88,25 @@ function initRoomTask(bot) {
   scheduleMessage(bot, "0 0 9 * * *", async () => await processData());
   tasks.forEach((i) => createScheduleTask(bot, i.cronTime, i.prefix, i.prompt));
   console.log("开启定时任务！");
+
+  // test
+  const test = async () => {
+    const message = await processData();
+    await sendMessageToAllRooms(bot, message);
+  };
+  // test()
 }
 function initPersonTask(bot) {
   // 用户配置
   const userConfigs = [
     {
-      name: "lay13234816528", // 用户的ID或标识符
-      message: "开始学习了嗷", // 要发送的消息内容
+      name: "微醺的香菜", // 用户的ID或标识符
+      message: "现在是早上九点，提醒微醺的香菜这个人总结一下今天学了什么", // 要发送的消息内容
       cronTime: "0 0 9 * * *", // 每天早上9点执行
     },
     {
-      name: "lay13234816528", // 用户的ID或标识符
-      message: "今天学了些什么呢？", // 要发送的消息内容
+      name: "微醺的香菜", // 用户的ID或标识符
+      message: "现在是晚上上九点，提醒微醺的香菜这个人总结一下今天学了什么", // 要发送的消息内容
       cronTime: "0 0 21 * * *", // 每天早上9点执行
     },
   ];
@@ -115,6 +117,7 @@ function initPersonTask(bot) {
       const contact = await bot.Contact.find({
         name,
       });
+
       if (contact) {
         await contact.say(message);
       } else {
@@ -124,16 +127,55 @@ function initPersonTask(bot) {
       console.error(`Error: ${e.message}`);
     }
   }
+
   // 定时任务
   userConfigs.forEach((userConfig) => {
-    schedule.scheduleJob(userConfig.cronTime, () => {
-      sendMessageToUser(bot, userConfig.name, userConfig.message);
+    schedule.scheduleJob(userConfig.cronTime, async () => {
+      const message = await AI.reply(
+        "用温柔的语气，但是不要过亲昵",
+        userConfig.message
+      );
+      sendMessageToUser(bot, userConfig.name, message);
     });
   });
 
   console.log("开启单人消息定时任务！");
+
+  //test
+  const test = async (name = "微醺的香菜", a = "询问今天学了些什么？") => {
+    try {
+      const message = await AI.reply("用温柔的语气", a);
+
+      const contact = await bot.Contact.find({
+        name,
+      });
+
+      if (contact) {
+        await contact.say(message);
+      } else {
+        console.error("未找到指定用户");
+      }
+    } catch (e) {
+      console.error(`Error: ${e.message}`);
+    }
+  };
+  // test();
 }
 export async function startScheduledTasks(bot) {
   initRoomTask(bot);
   initPersonTask(bot);
 }
+
+// const test = (prefix, prompt) => {
+//   return AI.reply(prefix, prompt);
+// };
+// const res = await Promise.all(
+//   [
+//     {
+//       cronTime: "0 12 * * *",
+//       prefix: "来一段中午十二点的问好，提醒吃饭",
+//       prompt: "面对群友，情感丰富，但是简洁一点，用中文",
+//     },
+//   ].map((i) => test(i.prefix, i.prompt))
+// );
+// console.log(res);
