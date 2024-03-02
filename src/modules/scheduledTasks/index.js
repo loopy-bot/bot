@@ -64,28 +64,29 @@ async function initRoomTask(bot) {
 
   const tasks = [
     {
-      cronTime: "0 12 * * *",
+      cronTime: "0 0 12 * * *",
       prefix: "来一段中午十二点的问好，提醒吃饭",
       prompt: "面对群友，情感丰富，但是简洁一点",
     },
     {
-      cronTime: "0 14 * * *",
+      cronTime: "0 0 14 * * *",
       prefix: "来一段下午二点的问好",
       prompt: "面对群友，情感丰富，但是简洁一点",
     },
     {
-      cronTime: "0 18 * * *",
+      cronTime: "0 0 18 * * *",
       prefix: "来一段下午六点的问好，提醒吃饭",
       prompt: "面对群友，情感丰富，但是简洁一点",
     },
     {
-      cronTime: "0 23 * * *",
-      prefix: "来一段晚上十一点的晚安问好",
+      cronTime: "0 0 0 * * *",
+      prefix: "来一段晚上十二点的晚安问好",
       prompt: "面对群友，情感丰富，但是简洁一点",
     },
   ];
 
   scheduleMessage(bot, "0 0 9 * * *", async () => await processData());
+  scheduleMessage(bot, "0 5 0 * * *", async () => await processData());
   tasks.forEach((i) => createScheduleTask(bot, i.cronTime, i.prefix, i.prompt));
   console.log("开启定时任务！");
 

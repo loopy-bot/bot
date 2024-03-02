@@ -1,11 +1,14 @@
-FROM node:18.17.0-alpine
+# 使用Node.js 16的Alpine版本作为基础镜像
+FROM node:16-alpine3.14
 
-RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-RUN echo 'Asia/Shanghai' >/etc/timezone
+# 安装Python3
+RUN apk add --update python3 py3-pip
 
-WORKDIR /bot
+WORKDIR /wechat-bot
 
 COPY package.json .
+# 安装Python和Node.js依赖项
+RUN pip3 install --no-cache-dir -r requirements.txt
 RUN npm install
 COPY . .
 

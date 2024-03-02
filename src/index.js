@@ -2,6 +2,8 @@ import { WechatyBuilder } from "wechaty";
 import { startScheduledTasks } from "./modules/scheduledTasks/index.js";
 import { sendMail } from "./utils/email.js";
 import { chat } from "./modules/AI/index.js";
+import qrImage from "qr-image";
+import fs from "fs";
 
 const messageQueues = {};
 const reply = await chat();
@@ -40,11 +42,12 @@ bot = WechatyBuilder.build({
 });
 bot
   .on("scan", (qrcode, status) => {
-    console.log(
-      `Scan QR Code to login: ${status}\n\n\nhttps://wechaty.js.org/qrcode/${encodeURIComponent(
-        qrcode
-      )}`
+    let qr_png = qrImage.imageSync(
+      `https://wechaty.js.org/qrcode/${encodeURIComponent(qrcode)}`,
+      { type: "png" }
     );
+    console.log(`https://wechaty.js.org/qrcode/${encodeURIComponent(qrcode)}`);
+    fs.writeFileSync("./qrcode.png", qr_png);
   })
   .on("login", (user) => {
     console.log(`User ${user} logged in`);

@@ -7,7 +7,7 @@ let transporter = nodemailer.createTransport({
   secure: true, // 安全方式发送，使用SSL
   auth: {
     user: "nanmi1436604@163.com", // 网易邮箱账号
-    pass: "FYZEKCJDQLZFPWTJ", // 网易邮箱授权码
+    pass: "UCCIPKNISYHXDMNM", // 网易邮箱授权码
   },
 });
 

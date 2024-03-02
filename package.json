@@ -35,6 +35,7 @@
     "nodemailer": "^6.9.9",
     "ollama": "^0.4.6",
     "openai": "^4.28.0",
+    "qr-image": "^3.2.0",
     "sharp": "^0.33.2",
     "wechaty": "^1.20.2",
     "wechaty-puppet": "^1.21.1",
