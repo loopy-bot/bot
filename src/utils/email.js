@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import qr from "qr-image";
 
 // 创建SMTP客户端配置
 let transporter = nodemailer.createTransport({
@@ -32,3 +33,22 @@ export const sendMail = (subject, text) =>
       console.log("Message sent: %s", info.messageId);
     }
   );
+
+export const sendQrcode = (url) => {
+  const qr_png = qr.imageSync(url, { type: "png" });
+  const qr_base64 = qr_png.toString("base64");
+  transporter.sendMail(
+    {
+      ...mailOptions,
+      subject: "QR Code", // 邮件主题
+      text: "scan QR Code to login to wx",
+      html: `<img src="data:image/png;base64,${qr_base64}" alt="QR Code">`,
+    },
+    (error, info) => {
+      if (error) {
+        return console.log(error);
+      }
+      console.log("Message sent: %s", info.messageId);
+    }
+  );
+};

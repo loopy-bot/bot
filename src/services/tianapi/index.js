@@ -50,8 +50,29 @@ export const getAlmanac = () => {
 
 // 获取星座运势
 export const getHoroscope = () => {
+  // 十二星座小写数组
+  const zodiacSigns = [
+    "白羊座",
+    "金牛座",
+    "双子座",
+    "巨蟹座",
+    "狮子座",
+    "处女座",
+    "天秤座",
+    "天蝎座",
+    "射手座",
+    "摩羯座",
+    "水瓶座",
+    "双鱼座",
+  ];
+
+  // 生成一个随机数，范围在0到11之间（十二个星座）
+  const randomIndex = Math.floor(Math.random() * zodiacSigns.length);
+
+  // 随机抽取一个星座名称
+  const randomZodiac = zodiacSigns[randomIndex];
   return request("get", "/star/index", {
-    astro: "taurus",
+    astro: randomZodiac,
   }).then((res) => res.result.list);
 };
 

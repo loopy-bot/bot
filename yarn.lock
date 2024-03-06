@@ -4057,7 +4057,7 @@ punycode@^2.1.0, punycode@^2.1.1:
 
 qr-image@^3.2.0:
   version "3.2.0"
-  resolved "https://registry.npmmirror.com/qr-image/-/qr-image-3.2.0.tgz#9fa8295beae50c4a149cf9f909a1db464a8672e8"
+  resolved "https://npm.corp.kuaishou.com/qr-image/-/qr-image-3.2.0.tgz#9fa8295beae50c4a149cf9f909a1db464a8672e8"
   integrity sha512-rXKDS5Sx3YipVsqmlMJsJsk6jXylEpiHRC2+nJy66fxA5ExYyGa4PqwteW69SaVmAb2OQ18HbYriT7cGQMbduw==
 
 qrcode-terminal@^0.12.0:

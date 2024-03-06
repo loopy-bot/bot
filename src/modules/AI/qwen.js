@@ -22,7 +22,7 @@ export const reply = (prefix, prompt) => {
           return;
         }
         resolve(
-          JSON.parse(iconv.decode(stdout, "gbk"))?.output?.choices[0]?.message
+          JSON.parse(iconv.decode(stdout, "utf8"))?.output?.choices[0]?.message
             .content
         );
       }
