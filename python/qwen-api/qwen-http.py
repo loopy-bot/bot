@@ -8,9 +8,9 @@ app = Flask(__name__)
 
 dashscope.api_key = 'sk-055423e7ed8f4db0b324b4cff3caafa4'
 
-@app.route('/get', methods=['GET'])
-def get_example():
-    return 'This is a GET request response'
+@app.route('/get',methods=['GET'])
+def test():
+    return 'hello'
 @app.route('/generate', methods=['POST'])
 def call_with_messages():
     data = request.json
@@ -36,4 +36,4 @@ def call_with_messages():
         }), response.status_code
 
 if __name__ == '__main__':
-    app.run(debug=True,port=8080)
+    app.run(debug=False,port=8766,host='0.0.0.0')

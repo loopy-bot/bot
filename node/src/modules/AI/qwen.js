@@ -13,8 +13,9 @@ if (process.platform === "darwin") {
 }
 
 export const reply = (prefix, prompt) => {
-  return axios.post('http://127.0.0.1:8080/generate',{prefix,prompt}).then(res => res.data)
+  return axios.post('http://localhost:8766/generate',{prefix,prompt}).then(res => res.data)
 };
+reply('1+1','what').then(res => console.log(res));
 
 export const chat = () => {
   let retryCount = 0;
@@ -51,7 +52,7 @@ export const chat = () => {
         await new Promise((resolve, reject) => {
           ws.on("open", resolve);
           ws.on("error", (e) => {
-            console.error(`Failed to connect: ${e.message}, retrying...`);
+            console.error(`Failed to connect: ${e}, retrying...`);
             ws.close();
             reject(e);
           });
@@ -79,6 +80,6 @@ export const chat = () => {
     throw new Error("Max retries reached, stopping attempts to connect.");
   };
 
-  startPythonScript();
+  // startPythonScript();
   return connectWebSocket(); // No need for the extra setTimeout or Promise wrapper
 };

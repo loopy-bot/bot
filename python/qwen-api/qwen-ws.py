@@ -62,7 +62,7 @@ async def process_message(key, text, websocket):
     # 发送响应回客户端
     await websocket.send(json.dumps({'key': key, 'response': response}))
 
-start_server = websockets.serve(handle_model_interaction, "localhost", 8765)
+start_server = websockets.serve(handle_model_interaction, "0.0.0.0", 8765)
 
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
