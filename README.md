@@ -27,7 +27,7 @@
 
 ## 配置文件
 
-根据`node`目录下的`config.tempalte.js`文件配置好对应参数
+根据`node`和`python`目录下的`config.tempalte.js`文件配置好对应参数
 
 - 模型和天行数据的key
 - 邮箱配置
