@@ -19,5 +19,5 @@
 
 # 环境要求
 
-- node >= 18
-- python >= 3
+- node >= 18 「package.json」
+- python >= 3 「requirements.tet」
