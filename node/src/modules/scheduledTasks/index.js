@@ -22,7 +22,7 @@ export const processData = async () => {
       JSON.stringify(news)
     ),
     AI.reply(
-      "请解析以下内容，并提取主要信息，简练总结出一段话，不要超过40个字。回复需要生动一点，不要机器化",
+      "请解析以下内容，并提取主要信息，简练总结出一段话，不要超过60个字。回复需要生动一点，不要机器化",
       JSON.stringify(almanac)
     ),
 
@@ -86,7 +86,6 @@ async function initRoomTask(bot) {
   ];
 
   scheduleMessage(bot, "0 0 9 * * *", async () => await processData());
-  scheduleMessage(bot, "0 5 0 * * *", async () => await processData());
   tasks.forEach((i) => createScheduleTask(bot, i.cronTime, i.prefix, i.prompt));
   console.log("开启定时任务！");
 
@@ -95,19 +94,29 @@ async function initRoomTask(bot) {
     const message = await processData();
     await sendMessageToAllRooms(bot, message);
   };
-  // test()
+  test()
 }
 function initPersonTask(bot) {
   // 用户配置
   const userConfigs = [
     {
       name: "微醺的香菜", // 用户的ID或标识符
-      message: "现在是早上九点，提醒微醺的香菜这个人总结一下今天学了什么", // 要发送的消息内容
+      message: "现在是早上九点，随机创建一个英语短句子进行提供给我进行学习", // 要发送的消息内容
       cronTime: "0 0 9 * * *", // 每天早上9点执行
     },
     {
       name: "微醺的香菜", // 用户的ID或标识符
-      message: "现在是晚上上九点，提醒微醺的香菜这个人总结一下今天学了什么", // 要发送的消息内容
+      message: "现在是晚上上九点，询问一下今天有没有学习英语", // 要发送的消息内容
+      cronTime: "0 0 21 * * *", // 每天早上9点执行
+    },
+    {
+      name: "嘎", // 用户的ID或标识符
+      message: "现在是早上九点，随机创建一个英语短句子进行提供给我进行学习", // 要发送的消息内容
+      cronTime: "0 0 9 * * *", // 每天早上9点执行
+    },
+    {
+      name: "嘎", // 用户的ID或标识符
+      message: "现在是晚上上九点，询问一下今天有没有学习英语", // 要发送的消息内容
       cronTime: "0 0 21 * * *", // 每天早上9点执行
     },
   ];
@@ -133,7 +142,7 @@ function initPersonTask(bot) {
   userConfigs.forEach((userConfig) => {
     schedule.scheduleJob(userConfig.cronTime, async () => {
       const message = await AI.reply(
-        "用温柔的语气，但是不要过亲昵",
+        "以一个知识渊博的学者身份进行辅助",
         userConfig.message
       );
       sendMessageToUser(bot, userConfig.name, message);
@@ -160,23 +169,11 @@ function initPersonTask(bot) {
       console.error(`Error: ${e.message}`);
     }
   };
-  // test();
+  test();
 }
 export async function startScheduledTasks(bot) {
   initRoomTask(bot);
   initPersonTask(bot);
 }
 
-// const test = (prefix, prompt) => {
-//   return AI.reply(prefix, prompt);
-// };
-// const res = await Promise.all(
-//   [
-//     {
-//       cronTime: "0 12 * * *",
-//       prefix: "来一段中午十二点的问好，提醒吃饭",
-//       prompt: "面对群友，情感丰富，但是简洁一点，用中文",
-//     },
-//   ].map((i) => test(i.prefix, i.prompt))
-// );
-// console.log(res);
+

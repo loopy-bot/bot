@@ -15,35 +15,35 @@ if (process.platform === "darwin") {
 export const reply = (prefix, prompt) => {
   return axios.post('http://localhost:8766/generate',{prefix,prompt}).then(res => res.data)
 };
-reply('1+1','what').then(res => console.log(res));
+// reply('1+1','what').then(res => console.log(res));
 
 export const chat = () => {
   let retryCount = 0;
   const maxRetries = 10;
   const responseHandlers = {};
-  const startPythonScript = () => {
-    const pythonProcess = spawn(python, ["script/python/qwenws.py"]);
-    pythonProcess.stdout.on("data", (data) => {
-      console.log(`stdout: ${data}`);
-    });
-    pythonProcess.stderr.on("data", (data) => {
-      console.error(`stderr: ${data}`);
-    });
-    pythonProcess.on("close", (code) => {
-      console.log(`Python script exited with code ${code}`);
-    });
+  // const startPythonScript = () => {
+  //   const pythonProcess = spawn(python, ["script/python/qwenws.py"]);
+  //   pythonProcess.stdout.on("data", (data) => {
+  //     console.log(`stdout: ${data}`);
+  //   });
+  //   pythonProcess.stderr.on("data", (data) => {
+  //     console.error(`stderr: ${data}`);
+  //   });
+  //   pythonProcess.on("close", (code) => {
+  //     console.log(`Python script exited with code ${code}`);
+  //   });
 
-    // Handle Python process termination on Node.js exit events
-    const terminatePythonProcess = () => {
-      if (!pythonProcess.killed) {
-        pythonProcess.kill();
-      }
-    };
+  //   // Handle Python process termination on Node.js exit events
+  //   const terminatePythonProcess = () => {
+  //     if (!pythonProcess.killed) {
+  //       pythonProcess.kill();
+  //     }
+  //   };
 
-    process.on("exit", terminatePythonProcess);
-    process.on("SIGINT", terminatePythonProcess);
-    process.on("SIGTERM", terminatePythonProcess);
-  };
+  //   process.on("exit", terminatePythonProcess);
+  //   process.on("SIGINT", terminatePythonProcess);
+  //   process.on("SIGTERM", terminatePythonProcess);
+  // };
 
   const connectWebSocket = async () => {
     while (retryCount < maxRetries) {
