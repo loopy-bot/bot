@@ -41,7 +41,7 @@ bot = WechatyBuilder.build({
 bot
   .on("scan", (qrcode, status) => {
     console.log(`https://wechaty.js.org/qrcode/${encodeURIComponent(qrcode)}`);
-    sendQrcode(`https://wechaty.js.org/qrcode/${encodeURIComponent(qrcode)}`);
+    // sendQrcode(`https://wechaty.js.org/qrcode/${encodeURIComponent(qrcode)}`);
   })
   .on("login", (user) => {
     console.log(`User ${user} logged in`);
