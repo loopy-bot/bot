@@ -1,8 +1,9 @@
 import { exec, spawn } from "child_process";
 import iconv from "iconv-lite";
 import WebSocket from "ws";
+import axios from 'axios'
 
-let python;
+let python ='python3';
 let ws;
 
 if (process.platform === "darwin") {
@@ -12,22 +13,7 @@ if (process.platform === "darwin") {
 }
 
 export const reply = (prefix, prompt) => {
-  return new Promise((resolve, reject) => {
-    exec(
-      `${python} script/python/qwen.py "${prefix}" '${prompt}'`,
-      { encoding: "buffer" },
-      (err, stdout, stderr) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve(
-          JSON.parse(iconv.decode(stdout, "utf8"))?.output?.choices[0]?.message
-            .content
-        );
-      }
-    );
-  });
+  return axios.post('http://127.0.0.1:8080/generate',{prefix,prompt}).then(res => res.data)
 };
 
 export const chat = () => {
