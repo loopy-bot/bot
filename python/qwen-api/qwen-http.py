@@ -3,10 +3,16 @@ from flask import Flask, request, jsonify
 import random
 from http import HTTPStatus
 import dashscope
+import json
+
+# 打开并读取JSON文件
+with open('config.json', 'r') as f:
+    # 使用json.load方法将文件内容解析为Python字典或列表
+    config = json.load(f)
 
 app = Flask(__name__)
 
-dashscope.api_key = 'sk-055423e7ed8f4db0b324b4cff3caafa4'
+dashscope.api_key = config['QWEN_KEY']
 
 @app.route('/get',methods=['GET'])
 def test():

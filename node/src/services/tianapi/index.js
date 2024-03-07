@@ -1,10 +1,10 @@
 import axios from "axios";
-
+import { TIAN_KEY } from '../../../config.js'
 // 创建一个 axios 实例
 const instance = axios.create({
   baseURL: "https://apis.tianapi.com",
   params: {
-    key: "1f05c22e289b9e49281950e02e1bbece",
+    key: TIAN_KEY,
   },
 });
 

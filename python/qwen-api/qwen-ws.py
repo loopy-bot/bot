@@ -5,11 +5,14 @@ from http import HTTPStatus
 import dashscope
 import json
 
+with open('config.json', 'r') as f:
+    # 使用json.load方法将文件内容解析为Python字典或列表
+    config = json.load(f)
 # 使用字典来存储不同key的消息队列
 messages_dict = {}
 # 上下文长度
 max_len = 20
-dashscope.api_key='sk-055423e7ed8f4db0b324b4cff3caafa4'
+dashscope.api_key = config['QWEN_KEY']
 
 def call_with_messages(key, message):
     # 确保每个key都有自己的消息列表

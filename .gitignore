@@ -30,3 +30,4 @@ room.db
 dist-electron
 
 config.js
+config.json

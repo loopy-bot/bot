@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import qr from "qr-image";
-import { mailConfig } from '../../config.hs'
+import { mailConfig } from '../../config.js'
 
 // 创建SMTP客户端配置
 let transporter = nodemailer.createTransport({
