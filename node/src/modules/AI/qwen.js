@@ -20,7 +20,7 @@ export const createChat = () => {
         contextStorage[key].push(message);
     };
 
-    const processQueue = async (key) => {
+    const processQueue = async (key, callback) => {
         if (messageQueues[key].length === 0 || pendingPromises[key]) {
             return; // 如果队列为空或者已经有一个消息正在处理，则不进行操作
         }
@@ -32,20 +32,20 @@ export const createChat = () => {
             updateContext(key, { role: "user", content: text });
             const res = await chat(getContext(key)); // 假定chat是一个异步函数
             updateContext(key, { role: "assistant", content: res });
-            console.log(key, getContext(key));
+            callback(res);
         }
 
         pendingPromises[key] = false;
     };
 
-    const assembleMessage = async (key, text) => {
+    const assembleMessage = async (key, text, callback) => {
         if (!messageQueues[key]) {
             messageQueues[key] = [];
         }
 
         messageQueues[key].push(text);
 
-        processQueue(key); // 不需要await，这样就允许不同的key并行处理
+        processQueue(key, callback); // 不需要await，这样就允许不同的key并行处理
     };
 
     return {
