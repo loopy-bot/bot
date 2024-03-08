@@ -123,7 +123,10 @@ export const createChat = () => {
 
 // test:
 
-// reply("1+1", "what").then((res) => console.log(res));
+// reply(
+//     "提取出该文本所说的城市，只需要城市",
+//     "今天我要去长沙玩，长沙非常好，湘潭也不错"
+// ).then((res) => console.log(res));
 
 // const { assembleMessage } = createChat();
 // for (let i = 0; i < 5; i++) {

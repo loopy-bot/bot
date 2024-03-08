@@ -1,6 +1,23 @@
-import { createChat } from "../modules/AI/qwen.js";
+import { createChat, reply } from "../AI/qwen.js";
+import * as T from "../../services/tianapi/index.js";
 
 const { assembleMessage } = createChat();
+
+const matchQuestion = {
+    getWeather: async (text) => {
+        const weather = await reply(
+            "提取出该文本所说的城市，只需要城市，如果有多个城市，请用&分割",
+            text
+        );
+        const res = await Promise.all(
+            weather.split("&").map((i) => T.getWeather(i))
+        );
+        return reply(
+            "下面是一些天气信息，请总结描述，对于同一个城市的描述不要超过30字，并且不同城市需要分割显示",
+            JSON.stringify(res)
+        );
+    },
+};
 
 export const createProcessMessage = (bot) => {
     // 定义策略对象
@@ -15,10 +32,17 @@ export const createProcessMessage = (bot) => {
                 .replace(/@\S+\s/g, "")
                 .trim(); // 去除at部分
             console.log("问题：", text);
-            assembleMessage(roomId + contact.name(), text, (data) => {
-                console.log("回答：", data);
-                message.say(`@${contact.name()}\n${data}`);
-            });
+
+            if (text.includes("天气")) {
+                matchQuestion
+                    .getWeather(text)
+                    .then((data) => message.say(`@${contact.name()}\n${data}`));
+            } else {
+                assembleMessage(roomId + contact.name(), text, (data) => {
+                    console.log("回答：", data);
+                    message.say(`@${contact.name()}\n${data}`);
+                });
+            }
         },
         [bot.Message.Type.Image]: async (bot, message) => {
             // 处理图片消息

@@ -1,7 +1,7 @@
 import { WechatyBuilder } from "wechaty";
 import { startScheduledTasks } from "./modules/scheduledTasks/index.js";
 import { sendMail, sendQrcode } from "./utils/email.js";
-import { createProcessMessage } from "./utils/processMessage.js";
+import { createProcessMessage } from "./modules/processMessage/index.js";
 
 let name = "wechat-assistant-pro";
 let bot = "";
