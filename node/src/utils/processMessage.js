@@ -1,17 +1,17 @@
-import { chat } from "../modules/AI/index.js";
+import { chat,reply } from "../modules/AI/index.js";
 
 const messageQueues = {};
-const reply = await chat();
-
-const processNext = async (roomId, callback) => {
+// const reply = await chat();
+let l = 0;
+const processNext = async (roomId) => {
     if (messageQueues[roomId] && messageQueues[roomId].length > 0) {
-        const { text } = messageQueues[roomId][0]; // 取出队列中第一条消息
-        const response = await reply(text, roomId);
+        const { text,callback } = messageQueues[roomId][0]; // 取出队列中第一条消息
+        const response = await reply('回复', text);
 
-        callback(response.response);
+        callback(response?.response || response);
         messageQueues[roomId].shift(); // 处理完毕后移除队列中的该消息
         if (messageQueues[roomId].length) {
-            await processNext(roomId); // 如果队列中还有消息，则继续处理下一条
+            processNext(roomId); // 如果队列中还有消息，则继续处理下一条
         } else {
             delete messageQueues[roomId];
         }
@@ -19,16 +19,34 @@ const processNext = async (roomId, callback) => {
 };
 
 const enqueueMessage = async (roomId, text, callback) => {
+    
     if (!messageQueues[roomId]) {
         messageQueues[roomId] = [];
     }
-    messageQueues[roomId].push({ text });
+    messageQueues[roomId].push({ text,callback });
 
     if (messageQueues[roomId].length === 1) {
-        processNext(roomId, callback); // 如果是队列中的第一条消息，则立即处理
+        processNext(roomId); // 如果是队列中的第一条消息，则立即处理
     }
 };
-
+const test = () => {
+    enqueueMessage(1, "1 + 1多少", (data) => {
+        console.log("回答：", data);
+    });
+    enqueueMessage(2, "5 + 1多少", (data) => {
+        console.log("回答：", data);
+    });
+    enqueueMessage(3, "4 + 1多少", (data) => {
+        console.log("回答：", data);
+    });
+    enqueueMessage(4, "2 + 1多少", (data) => {
+        console.log("回答：", data);
+    });
+    enqueueMessage(5, "3 + 1多少", (data) => {
+        console.log("回答：", data);
+    });
+};
+// test();
 export const createProcessMessage = (bot) => {
     // 定义策略对象
     const messageStrategies = {
@@ -42,7 +60,7 @@ export const createProcessMessage = (bot) => {
                 .replace(/@\S+\s/g, "")
                 .trim(); // 去除at部分
             console.log("问题：", text);
-            enqueueMessage(roomId, text, (data) => {
+            enqueueMessage(roomId + contact.name() + `${l ++}`, text, (data) => {
                 console.log("回答：", data);
                 message.say(`@${contact.name()}\n${data}`);
             });

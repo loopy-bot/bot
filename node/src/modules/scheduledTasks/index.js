@@ -79,6 +79,11 @@ async function initRoomTask(bot) {
       prompt: "面对群友，情感丰富，但是简洁一点",
     },
     {
+      cronTime: "0 0 21 * * *",
+      prefix: "来一段晚上九点点的问好",
+      prompt: "面对群友，情感丰富，但是简洁一点",
+    },
+    {
       cronTime: "0 0 0 * * *",
       prefix: "来一段晚上十二点的晚安问好",
       prompt: "面对群友，情感丰富，但是简洁一点",

@@ -11,7 +11,7 @@ with open('config.json', 'r') as f:
 # 使用字典来存储不同key的消息队列
 messages_dict = {}
 # 上下文长度
-max_len = 20
+max_len = 8
 dashscope.api_key = config['QWEN_KEY']
 
 def call_with_messages(key, message):
@@ -19,7 +19,7 @@ def call_with_messages(key, message):
     if key not in messages_dict:
         messages_dict[key] = []
     
-    # 获取当前key的消息列表
+    # 获取当前key的上下文
     messages = messages_dict[key]
 
     # 如果 messages 长度达到 max_len，移除最旧的消息
