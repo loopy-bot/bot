@@ -49,7 +49,7 @@ export const getAlmanac = () => {
 };
 
 // 获取星座运势
-export const getHoroscope = () => {
+export const getHoroscope = (hor) => {
     // 十二星座小写数组
     const zodiacSigns = [
         "白羊座",
@@ -72,7 +72,7 @@ export const getHoroscope = () => {
     // 随机抽取一个星座名称
     const randomZodiac = zodiacSigns[randomIndex];
     return request("get", "/star/index", {
-        astro: randomZodiac,
+        astro: hor || randomZodiac,
     }).then((res) => res.result.list);
 };
 
