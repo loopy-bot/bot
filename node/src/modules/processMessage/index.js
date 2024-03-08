@@ -20,15 +20,16 @@ const matchQuestion = {
             weather.split("&").map((i) => T.getWeather(i))
         );
         return reply(
-            "下面是一些天气信息，请总结描述，对于同一个城市的描述不要超过30字，并且不同城市需要分割显示，如果一个城市的话，就只需要显示一个城市就行，不需要过多举例",
+            "下面是一些天气信息，请总结描述，对于同一个城市的描述不要超过30字，并且不同城市需要分割显示，如果一个城市的话，就只需要显示一个城市就行，不需要过多举例，内容如下：",
             JSON.stringify(res)
         );
     },
     getHoroscope: async (text) => {
         const hor = await reply(
-            "提取出该文本所说的星座，只需要星座，如果有多个星座，请用&分割，如果少了座这个字的话，需要补充完整为某某座",
+            "提取出该文本所说的星座，只需要星座，如果有多个星座，请用&分割，如果少了座这个字的话，需要补充完整为某某座,内容如下：",
             text
         );
+        console.log(hor);
         const res = await Promise.all(
             hor.split("&").map((i) => T.getHoroscope(i))
         );
