@@ -1,9 +1,9 @@
 import { exec, spawn } from "child_process";
 import iconv from "iconv-lite";
 import WebSocket from "ws";
-import axios from 'axios'
+import axios from "axios";
 
-let python ='python3';
+let python = "python3";
 let ws;
 
 if (process.platform === "darwin") {
@@ -13,7 +13,9 @@ if (process.platform === "darwin") {
 }
 
 export const reply = (prefix, prompt) => {
-  return axios.post('http://localhost:8766/generate',{prefix,prompt}).then(res => res.data)
+  return axios
+    .post("http://localhost:8766/generate", { prefix, prompt })
+    .then((res) => res.data);
 };
 // reply('1+1','what').then(res => console.log(res));
 
@@ -21,6 +23,7 @@ export const chat = () => {
   let retryCount = 0;
   const maxRetries = 10;
   const responseHandlers = {};
+  console.log("connect to ws");
   // const startPythonScript = () => {
   //   const pythonProcess = spawn(python, ["script/python/qwenws.py"]);
   //   pythonProcess.stdout.on("data", (data) => {
