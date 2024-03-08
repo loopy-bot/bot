@@ -125,9 +125,9 @@ export const createChat = () => {
 
 // reply("1+1", "what").then((res) => console.log(res));
 
-const { assembleMessage } = createChat();
-for (let i = 0; i < 5; i++) {
-    assembleMessage(i, "你会什么");
-    assembleMessage(i, "随机抽一个点回答");
-    assembleMessage(i, "你认为你回答的怎么样");
-}
+// const { assembleMessage } = createChat();
+// for (let i = 0; i < 5; i++) {
+//     assembleMessage(i, "你会什么");
+//     assembleMessage(i, "随机抽一个点回答");
+//     assembleMessage(i, "你认为你回答的怎么样");
+// }
