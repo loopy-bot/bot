@@ -26,7 +26,7 @@ const matchQuestion = {
     },
     getHoroscope: async (text) => {
         const hor = await reply(
-            "提取出该文本所说的星座，只需要星座，如果有多个星座，请用&分割",
+            "提取出该文本所说的星座，只需要星座，如果有多个星座，请用&分割，如果少了座这个字的话，需要补充完整为某某座",
             text
         );
         const res = await Promise.all(
@@ -51,16 +51,20 @@ export const createProcessMessage = (bot) => {
                 .text()
                 .replace(/@\S+\s/g, "")
                 .trim(); // 去除at部分
-            console.log("问题：", text);
-            if (text.includes("功能")) {
+            const type = await reply(
+                "根据以下文本判断本次询问属于星座,天气,功能,无法推测中的哪一个，只需要单独回复给我，不需要过多解释，比如：判断为询问星座时，返回星座，判断为询问天气时返回天气，无法判断则返回无法推测即可，内容如下：",
+                text
+            );
+            console.log(text, type);
+            if (type.includes("功能")) {
                 matchQuestion
                     .getPoint()
                     .then((data) => message.say(`@${contact.name()}\n${data}`));
-            } else if (text.includes("星座")) {
+            } else if (type.includes("星座")) {
                 matchQuestion
                     .getHoroscope(text)
                     .then((data) => message.say(`@${contact.name()}\n${data}`));
-            } else if (text.includes("天气")) {
+            } else if (type.includes("天气")) {
                 matchQuestion
                     .getWeather(text)
                     .then((data) => message.say(`@${contact.name()}\n${data}`));
@@ -139,3 +143,17 @@ const test = () => {
     });
 };
 // test();
+const a = (text) =>
+    reply(
+        "根据以下文本判断本次询问属于星座,天气,功能,无法推测中的哪一个，只需要单独回复给我，不需要过多解释，比如：判断为询问星座时，返回星座，判断为询问天气时返回天气，无法判断则返回无法推测即可，内容如下：",
+        text
+    ).then((res) => console.log(res));
+// a("水瓶呢");
+// a("水瓶呢");
+// a("水瓶呢");
+// a("水瓶呢");
+// a("长沙太阳好吗");
+// a("长沙太阳好吗");
+// a("长沙太阳好吗");
+// a("长沙太阳好吗");
+// a("长沙太阳好吗");
