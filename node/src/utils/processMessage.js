@@ -1,12 +1,12 @@
-import { chat,reply } from "../modules/AI/index.js";
+import { chat, reply } from "../modules/AI/index.js";
 
 const messageQueues = {};
 // const reply = await chat();
 let l = 0;
 const processNext = async (roomId) => {
     if (messageQueues[roomId] && messageQueues[roomId].length > 0) {
-        const { text,callback } = messageQueues[roomId][0]; // 取出队列中第一条消息
-        const response = await reply('回复', text);
+        const { text, callback } = messageQueues[roomId][0]; // 取出队列中第一条消息
+        const response = await reply("回复", text);
 
         callback(response?.response || response);
         messageQueues[roomId].shift(); // 处理完毕后移除队列中的该消息
@@ -19,11 +19,10 @@ const processNext = async (roomId) => {
 };
 
 const enqueueMessage = async (roomId, text, callback) => {
-    
     if (!messageQueues[roomId]) {
         messageQueues[roomId] = [];
     }
-    messageQueues[roomId].push({ text,callback });
+    messageQueues[roomId].push({ text, callback });
 
     if (messageQueues[roomId].length === 1) {
         processNext(roomId); // 如果是队列中的第一条消息，则立即处理
@@ -60,7 +59,7 @@ export const createProcessMessage = (bot) => {
                 .replace(/@\S+\s/g, "")
                 .trim(); // 去除at部分
             console.log("问题：", text);
-            enqueueMessage(roomId + contact.name() + `${l ++}`, text, (data) => {
+            enqueueMessage(roomId + contact.name() + `${l++}`, text, (data) => {
                 console.log("回答：", data);
                 message.say(`@${contact.name()}\n${data}`);
             });
