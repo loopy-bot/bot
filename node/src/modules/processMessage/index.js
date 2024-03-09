@@ -65,6 +65,10 @@ export const createProcessMessage = (bot) => {
                     if (data) {
                         const fileBox = FileBox.fromBuffer(data, "image.png");
                         message.say(fileBox);
+                    } else {
+                        setTimeout(() => {
+                            message.say("当前正在创作，请稍等。");
+                        }, 1000);
                     }
                 });
             } else if (type.includes("语音")) {
@@ -72,6 +76,10 @@ export const createProcessMessage = (bot) => {
                     if (data) {
                         const fileBox = FileBox.fromBuffer(data, "audio.wav");
                         message.say(fileBox);
+                    } else {
+                        setTimeout(() => {
+                            message.say("当前正在创作，请稍等。");
+                        }, 1000);
                     }
                 });
             } else if (type.includes("星座")) {
