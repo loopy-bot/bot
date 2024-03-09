@@ -20,7 +20,7 @@ const matchQuestion = {
             weather.split("&").map((i) => T.getWeather(i))
         );
         return reply(
-            "下面是一些天气信息，请总结描述，对于同一个城市的描述不要超过30字，并且不同城市需要分割显示，如果一个城市的话，就只需要显示一个城市就行，不需要过多举例，内容如下：",
+            `下面是一些天气信息，用户问题进行总结回答，问题为${text}，信息如下：`,
             JSON.stringify(res)
         );
     },
@@ -34,7 +34,7 @@ const matchQuestion = {
             hor.split("&").map((i) => T.getHoroscope(i))
         );
         return reply(
-            "下面是一些星座，请总结描述，对于同一个星座的描述不要超过50字，并且不同星座需要分割显示，如果一个星座的话，就只需要显示一个星座就行，不需要过多举例",
+            `下面是一些星座信息，用户问题进行总结回答，问题为${text}，信息如下：`,
             JSON.stringify(res)
         );
     },
@@ -53,15 +53,11 @@ export const createProcessMessage = (bot) => {
                 .replace(/@\S+\s/g, "")
                 .trim(); // 去除at部分
             const type = await reply(
-                "根据以下文本判断本次询问属于星座,天气,功能,无法推测中的哪一个，只需要单独回复给我，不需要过多解释，比如：判断为询问星座时，返回星座，判断为询问天气时返回天气，无法判断则返回无法推测即可，内容如下：",
+                "根据以下文本判断本次询问属于星座,天气,无法推测中的哪一个，只需要单独回复给我，不需要过多解释，比如：判断为询问星座时，返回星座，判断为询问天气时返回天气，无法判断则返回无法推测即可，内容如下：",
                 text
             );
             console.log(text, type);
-            if (type.includes("功能")) {
-                matchQuestion
-                    .getPoint()
-                    .then((data) => message.say(`@${contact.name()}\n${data}`));
-            } else if (type.includes("星座")) {
+            if (type.includes("星座")) {
                 matchQuestion
                     .getHoroscope(text)
                     .then((data) => message.say(`@${contact.name()}\n${data}`));

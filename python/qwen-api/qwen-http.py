@@ -4,6 +4,7 @@ import random
 from http import HTTPStatus
 import dashscope
 import json
+import broadscope_bailian
 
 # 打开并读取JSON文件
 with open('config.json', 'r') as f:
@@ -13,6 +14,11 @@ with open('config.json', 'r') as f:
 app = Flask(__name__)
 
 dashscope.api_key = config['QWEN_KEY']
+
+access_key_id = config["ACCESS_KEY_ID"]
+access_key_secret = config["ACCESS_KEY_SECRET"]
+agent_key = config["AGENT_KEY"]
+app_id = config["APP_ID"]
 
 @app.route('/get',methods=['GET'])
 def test():
@@ -62,5 +68,27 @@ def call_with_messages():
             'error_message': response.message
         }), response.status_code
 
+@app.route('/app/chat', methods=['post'])
+def test_model_completions():
+    data = request.json
+    messages = data.get('messages')
+    if not messages:
+        return jsonify({'error': 'Missing messages'}), 400
+    client = broadscope_bailian.AccessTokenClient(access_key_id=access_key_id, access_key_secret=access_key_secret,
+                                                    agent_key=agent_key)
+    token = client.get_token()
+    resp = broadscope_bailian.Completions(token=token).create(
+            app_id=app_id,
+            messages=messages,
+            result_format="message"
+        )
+    if not resp.get("Success"):
+        print('failed to create completion, request_id: %s, code: %s, message: %s' % (
+            resp.get("RequestId"), resp.get("Code"), resp.get("Message")))
+        return jsonify({'error': '接口调用失败',"Message": resp.get("Message") }), 400
+
+    content = resp.get("Data", {}).get("Choices", [])[0].get("Message", {}).get("Content")
+    return jsonify(content)
+
 if __name__ == '__main__':
-    app.run(debug=False,port=8766,host='0.0.0.0')
+    app.run(debug=True,port=8766,host='0.0.0.0')
