@@ -95,7 +95,7 @@ def app_chat():
     content = resp.get("Data", {}).get("Choices", [])[0].get("Message", {}).get("Content")
     return jsonify(content)
 
-@app.route('/video',methods=['POST'])
+@app.route('/audio',methods=['POST'])
 def app_video():
     data = request.json
     prefix = data.get('prefix')
