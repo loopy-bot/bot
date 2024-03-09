@@ -1,8 +1,10 @@
-import { createChat, reply } from "../AI/qwen.js";
+import { createChat, reply, createAudioReply, createDraw } from "../AI/qwen.js";
+import { FileBox } from "file-box";
 import * as T from "../../services/tianapi/index.js";
 
 const { assembleMessage } = createChat();
-
+const replyAudio = createAudioReply();
+const replyImage = createDraw();
 const matchQuestion = {
     getPoint: async () => {
         const res = await reply(
@@ -53,11 +55,26 @@ export const createProcessMessage = (bot) => {
                 .replace(/@\S+\s/g, "")
                 .trim(); // 去除at部分
             const type = await reply(
-                "根据以下文本判断本次询问属于星座,天气,无法推测中的哪一个，只需要单独回复给我，不需要过多解释，比如：判断为询问星座时，返回星座，判断为询问天气时返回天气，无法判断则返回无法推测即可，内容如下：",
+                "如果用户想进行画图操作，一切与画画有关系的，就回复绘画，如果用户是想询问天气相关的，请回复天气：如果用户向询问星座相关的，请回复星座，如果用户让模型进行说某段故事，或者用说的行为进行操作的，一系列会发出声音的，请回复语音，如果以上都不是，就回复无法推测。根据以上条件和以下信息，推测用户行为，并且严格要求回复标准进行回复，内容如下",
                 text
             );
             console.log(text, type);
-            if (type.includes("星座")) {
+            if (type.includes("绘画")) {
+                message.say(`@${contact.name()}\n 绘画ing...`);
+                replyImage(text).then((data) => {
+                    if (data) {
+                        const fileBox = FileBox.fromBuffer(data, "image.png");
+                        message.say(fileBox);
+                    }
+                });
+            } else if (type.includes("语音")) {
+                replyAudio("情感丰富，回答下列问题：", text).then((data) => {
+                    if (data) {
+                        const fileBox = FileBox.fromBuffer(data, "audio.wav");
+                        message.say(fileBox);
+                    }
+                });
+            } else if (type.includes("星座")) {
                 matchQuestion
                     .getHoroscope(text)
                     .then((data) => message.say(`@${contact.name()}\n${data}`));

@@ -1,4 +1,9 @@
-import { chat, generate } from "../../services/qwen-api/index.js";
+import {
+    chat,
+    generate,
+    generateAudio,
+    generateImage,
+} from "../../services/qwen-api/index.js";
 
 export const reply = generate;
 
@@ -50,6 +55,24 @@ export const createChat = () => {
 
     return {
         assembleMessage,
+    };
+};
+export const createDraw = () => {
+    let lock = false;
+    return (prefix, prompt) => {
+        if (!lock) {
+            lock = true;
+            return generateImage(prefix, prompt).finally(() => (lock = false));
+        } else return Promise.resolve(false);
+    };
+};
+export const createAudioReply = () => {
+    let lock = false;
+    return (prefix, prompt) => {
+        if (!lock) {
+            lock = true;
+            return generateAudio(prefix, prompt).finally(() => (lock = false));
+        } else return Promise.resolve(false);
     };
 };
 
