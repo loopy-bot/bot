@@ -1,0 +1,24 @@
+// 全局变量定义
+$titleHeight: var(--size-title-height, 60px);
+
+$sideBarWidth: 220px;
+$closeBarWidth: 49px;
+
+$navBarHeight: 50px;
+//tagsView
+$tagViewHeight: 32px;
+//app-main padding
+$appMainPadding: 10px;
+
+.nav-svg-icon {
+  .svg-icon {
+    width: 12px;
+    height: 12px;
+  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+}
+

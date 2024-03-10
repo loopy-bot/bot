@@ -1,0 +1,26 @@
+@import './variables.scss';
+@import './transition.scss';
+@import './reset-style.scss';
+
+//scroll
+@mixin main-show-wh() {
+  /* css 声明 */
+  height: calc(100vh - #{$navBarHeight} - #{$tagViewHeight} - #{$appMainPadding * 2});
+  width: 100%;
+}
+.scroll-y {
+  @include main-show-wh();
+  overflow-y: auto;
+}
+.scroll-x {
+  @include main-show-wh();
+  overflow-x: auto;
+}
+.scroll-xy {
+  @include main-show-wh();
+  overflow: auto;
+}
+.available.routeDate{
+  color: orange;
+  font-weight: bolder;
+}

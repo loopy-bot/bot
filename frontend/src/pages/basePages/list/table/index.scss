@@ -1,0 +1,14 @@
+.container {
+  padding-bottom: 20px;
+}
+:deep(.arco-table-th) {
+  &:last-child {
+    .arco-table-th-item-title {
+      margin-left: 16px;
+    }
+  }
+}
+.hint {
+  text-align: center;
+  font-size: 19px;
+}

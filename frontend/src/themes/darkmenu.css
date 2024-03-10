@@ -1,0 +1,61 @@
+.darkmenu {
+  --color-menu-dark-text: 0,0,0;
+  --color-menu-bg:  255, 255, 255;
+  --color-var-bg: #000000;
+  --color-var-text: #ffffff;
+}
+
+.darkmenu .arco-menu-light .arco-menu-item:hover,
+.darkmenu .arco-menu-light .arco-menu-group-title:hover,
+.darkmenu .arco-menu-light .arco-menu-pop-header:hover,
+.darkmenu .arco-menu-light .arco-menu-inline-header:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: rgb(var(--primary-6));
+}
+
+.darkmenu .arco-menu-light .arco-menu-item:hover .arco-icon,
+.darkmenu .arco-menu-light .arco-menu-group-title:hover .arco-icon,
+.darkmenu .arco-menu-light .arco-menu-pop-header:hover .arco-icon,
+.darkmenu .arco-menu-light .arco-menu-inline-header:hover .arco-icon,
+.darkmenu .arco-menu-light .arco-menu-item:hover .arco-menu-icon,
+.darkmenu .arco-menu-light .arco-menu-group-title:hover .arco-menu-icon,
+.darkmenu .arco-menu-light .arco-menu-pop-header:hover .arco-menu-icon,
+.darkmenu .arco-menu-light .arco-menu-inline-header:hover .arco-menu-icon {
+  color: rgb(var(--primary-6));
+}
+
+.darkmenu .arco-menu-light .arco-menu-item.arco-menu-selected {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: rgb(var(--primary-6));
+}
+
+.darkmenu .arco-menu-light .arco-menu-inline-header.arco-menu-selected {
+  color: rgb(var(--primary-6));
+}
+
+.darkmenu .arco-menu-light .arco-menu-item,
+.darkmenu .arco-menu-light .arco-menu-group-title,
+.darkmenu .arco-menu-light .arco-menu-pop-header,
+.darkmenu .arco-menu-light .arco-menu-inline-header {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.darkmenu .arco-menu-light .arco-menu-item,
+.darkmenu .arco-menu-light .arco-menu-group-title,
+.darkmenu .arco-menu-light .arco-menu-pop-header,
+.darkmenu .arco-menu-light .arco-menu-inline-header {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.darkmenu .arco-menu-light .arco-menu-inline-header.arco-menu-selected:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.darkmenu {
+  --color-menu-dark-text: 255, 255, 255;
+  --color-menu-bg:  0,23,41;
+  --color-menu-dark-bg: #001729;
+  --color-menu-light-bg: #001524;
+  --color-menu-dark-hover: rgba(255, 255, 255, 0.08);
+  --color-mask-bg: rgba(23, 23, 26, 0.6);
+}
