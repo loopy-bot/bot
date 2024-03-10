@@ -7,7 +7,7 @@ import dChilds from './devRoutes';
 export const constantRoutes = [
   {
     path: '/',
-    redirect: '/visualization/analysis',
+    redirect: '/hello',
     name: 'Dashboard',
     hidden: true,
   },

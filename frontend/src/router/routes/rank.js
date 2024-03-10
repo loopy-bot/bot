@@ -1,8 +1,1 @@
-export default [
-  'visualization',
-  'list',
-  'form',
-  'detail',
-  'office',
-  'map',
-];
+export default ['hello'];
