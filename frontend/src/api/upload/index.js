@@ -2,7 +2,7 @@ import Fly from 'flyio/dist/npm/fly';
 
 const fly = new Fly();
 
-export default function request (url, data) {
+export default function request(url, data) {
   return fly
     .request(url, data, {
       method: 'PUT',
@@ -17,4 +17,4 @@ export default function request (url, data) {
     .catch((e) => {
       console.log('error', e);
     });
-};
+}
