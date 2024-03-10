@@ -1,9 +1,10 @@
+import "../_alias/index.cjs";
 import { WechatyBuilder } from "wechaty";
-import { startScheduledTasks } from "./modules/scheduledTasks/index.js";
+import { startScheduledTasks } from "./modules/scheduled-tasks/index.js";
 import { sendMail, sendQrcode } from "./utils/email.js";
-import { createProcessMessage } from "./modules/processMessage/index.js";
+import { createProcessMessage } from "./modules/process-message/index.js";
 
-let name = "wechat-assistant-pro";
+let name = "loopy_bot";
 let bot = "";
 let handleMessage;
 bot = WechatyBuilder.build({
@@ -27,7 +28,7 @@ bot.on("scan", (qrcode, status) => {
     .on("room-join", async (room, inviteeList, inviter) => {
         const nameList = inviteeList.map((i) => `@${i.name()}`).join(",");
         room.say(
-            `欢迎${nameList}加入🎉${await room.topic()}🎉一起来开启变强之旅🧑‍🦲\n\n哇呜！有问题看群公告嗷🧸`
+            `欢迎${nameList}🤪加入🎉${await room.topic()}🎉，一起来开启变强之旅🧑‍🦲\n\n哇呜！有问题看群公告嗷🧸`
         );
     })
     .on("error", (error) => {

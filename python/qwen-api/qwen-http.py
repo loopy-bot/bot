@@ -22,8 +22,7 @@ dashscope.api_key = config['QWEN_KEY']
 
 access_key_id = config["ACCESS_KEY_ID"]
 access_key_secret = config["ACCESS_KEY_SECRET"]
-agent_key = config["AGENT_KEY"]
-app_id = config["APP_ID"]
+
 
 @app.route('/get',methods=['GET'])
 def test():
@@ -77,6 +76,8 @@ def generate():
 def app_chat():
     data = request.json
     messages = data.get('messages')
+    agent_key = config["AGENT_KEY"]
+    app_id = config["APP_ID"]
     if not messages:
         return jsonify({'error': 'Missing messages'}), 400
     client = broadscope_bailian.AccessTokenClient(access_key_id=access_key_id, access_key_secret=access_key_secret,

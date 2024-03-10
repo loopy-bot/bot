@@ -18,6 +18,8 @@
 .env
 *.memory-card.json
 package-lock.json
+yarn.lock
+pnpm-lock.yaml
 # Runtime data
 pids
 *.pid
@@ -29,5 +31,6 @@ wechat.config.json
 room.db
 dist-electron
 
+# config
 config.js
 config.json
