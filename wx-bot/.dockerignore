@@ -1,5 +1,6 @@
-doc
-**/*.md
-*.md
 node_modules
-node_modules/*
+npm-debug.log
+Dockerfile
+.dockerignore
+.git
+.gitignore

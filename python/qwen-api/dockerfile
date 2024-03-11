@@ -8,7 +8,7 @@ WORKDIR /server
 COPY . .
 RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
 # 安装所需的 Python 包
-RUN pip install  flask dashscope
+RUN pip install -r requirements.txt
 
 # 暴露你的应用程序的端口
 EXPOSE 8766
