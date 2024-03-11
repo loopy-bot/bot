@@ -7,4 +7,8 @@ export class AliApp extends BaseEntity {
   appId: string;
   @Column()
   agentKey: string;
+  @Column()
+  name: string;
+  @Column()
+  description: string;
 }
