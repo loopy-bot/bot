@@ -1,79 +1,124 @@
-import {
-    chat,
-    generate,
-    generateAudio,
-    generateImage,
-} from "../../services/qwen-api/index.js";
+import { chat, generate, generateAudio, generateImage, chatRole } from '../../services/qwen-api/index.js';
 
 export const reply = generate;
 
 export const createChat = () => {
-    const MAX_CONTEXT = 8;
-    const contextStorage = {};
-    const messageQueues = {};
-    const pendingPromises = {};
+  const MAX_CONTEXT = 8;
+  const contextStorage = {};
+  const messageQueues = {};
+  const pendingPromises = {};
 
-    const getContext = (key) => contextStorage[key] || [];
-    const updateContext = (key, message) => {
-        if (!contextStorage[key]) {
-            contextStorage[key] = [];
-        }
-        // 限制上下文长度
-        if (contextStorage[key].length >= MAX_CONTEXT) {
-            contextStorage[key].shift();
-        }
-        contextStorage[key].push(message);
-    };
+  const getContext = (key) => contextStorage[key] || [];
+  const updateContext = (key, message) => {
+    if (!contextStorage[key]) {
+      contextStorage[key] = [];
+    }
+    // 限制上下文长度
+    if (contextStorage[key].length >= MAX_CONTEXT) {
+      contextStorage[key].shift();
+    }
+    contextStorage[key].push(message);
+  };
 
-    const processQueue = async (key, callback) => {
-        if (messageQueues[key].length === 0 || pendingPromises[key]) {
-            return; // 如果队列为空或者已经有一个消息正在处理，则不进行操作
-        }
+  const processQueue = async (key, callback) => {
+    if (messageQueues[key].length === 0 || pendingPromises[key]) {
+      return; // 如果队列为空或者已经有一个消息正在处理，则不进行操作
+    }
 
-        pendingPromises[key] = true;
+    pendingPromises[key] = true;
 
-        while (messageQueues[key].length > 0) {
-            const text = messageQueues[key].shift();
-            updateContext(key, { role: "user", content: text });
-            const res = await chat(getContext(key)); // 假定chat是一个异步函数
-            updateContext(key, { role: "assistant", content: res });
-            callback(res);
-        }
+    while (messageQueues[key].length > 0) {
+      const text = messageQueues[key].shift();
+      updateContext(key, { role: 'user', content: text });
+      const res = await chat(getContext(key)); // 假定chat是一个异步函数
+      updateContext(key, { role: 'assistant', content: res });
+      callback(res);
+    }
 
-        pendingPromises[key] = false;
-    };
+    pendingPromises[key] = false;
+  };
 
-    const assembleMessage = async (key, text, callback) => {
-        if (!messageQueues[key]) {
-            messageQueues[key] = [];
-        }
+  const assembleMessage = async (key, text, callback) => {
+    if (!messageQueues[key]) {
+      messageQueues[key] = [];
+    }
 
-        messageQueues[key].push(text);
+    messageQueues[key].push(text);
 
-        processQueue(key, callback); // 不需要await，这样就允许不同的key并行处理
-    };
+    processQueue(key, callback); // 不需要await，这样就允许不同的key并行处理
+  };
 
-    return {
-        assembleMessage,
-    };
+  return {
+    assembleMessage,
+  };
+};
+export const createRole = (params = {}) => {
+  const MAX_CONTEXT = 8;
+  const contextStorage = {};
+  const messageQueues = {};
+  const pendingPromises = {};
+  const { appId, agentKey } = params;
+
+  const getContext = (key) => contextStorage[key] || [];
+  const updateContext = (key, message) => {
+    if (!contextStorage[key]) {
+      contextStorage[key] = [];
+    }
+    // 限制上下文长度
+    if (contextStorage[key].length >= MAX_CONTEXT) {
+      contextStorage[key].shift();
+    }
+    contextStorage[key].push(message);
+  };
+
+  const processQueue = async (key, callback) => {
+    if (messageQueues[key].length === 0 || pendingPromises[key]) {
+      return; // 如果队列为空或者已经有一个消息正在处理，则不进行操作
+    }
+
+    pendingPromises[key] = true;
+
+    while (messageQueues[key].length > 0) {
+      const text = messageQueues[key].shift();
+      const res = await chatRole(text, getContext(key), appId, agentKey); // 假定chat是一个异步函数
+      updateContext(key, { user: text, bot: res });
+      callback(res);
+    }
+
+    pendingPromises[key] = false;
+  };
+
+  const assembleMessage = async (key, text, callback) => {
+    if (!messageQueues[key]) {
+      messageQueues[key] = [];
+    }
+
+    messageQueues[key].push(text);
+
+    processQueue(key, callback); // 不需要await，这样就允许不同的key并行处理
+  };
+
+  return {
+    assembleMessage,
+  };
 };
 export const createDraw = () => {
-    let lock = false;
-    return (prefix, prompt) => {
-        if (!lock) {
-            lock = true;
-            return generateImage(prefix, prompt).finally(() => (lock = false));
-        } else return Promise.resolve(false);
-    };
+  let lock = false;
+  return (prefix, prompt) => {
+    if (!lock) {
+      lock = true;
+      return generateImage(prefix, prompt).finally(() => (lock = false));
+    } else return Promise.resolve(false);
+  };
 };
 export const createAudioReply = () => {
-    let lock = false;
-    return (prefix, prompt) => {
-        if (!lock) {
-            lock = true;
-            return generateAudio(prefix, prompt).finally(() => (lock = false));
-        } else return Promise.resolve(false);
-    };
+  let lock = false;
+  return (prefix, prompt) => {
+    if (!lock) {
+      lock = true;
+      return generateAudio(prefix, prompt).finally(() => (lock = false));
+    } else return Promise.resolve(false);
+  };
 };
 
 // export const chat = () => {

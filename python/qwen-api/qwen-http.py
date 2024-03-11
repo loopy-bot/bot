@@ -86,7 +86,8 @@ def app_chat():
     resp = broadscope_bailian.Completions(token=token).create(
             app_id=app_id,
             messages=messages,
-            result_format="message"
+            seed=random.randint(1, 10000),
+            result_format='message',
         )
     if not resp.get("Success"):
         print('failed to create completion, request_id: %s, code: %s, message: %s' % (
@@ -145,5 +146,30 @@ def draw():
         print('Failed, status_code: %s, code: %s, message: %s' %
               (rsp.status_code, rsp.code, rsp.message))
 
+@app.route('/role/chat', methods=['POST'])
+def chat_role():
+    data = request.json
+    prompt = data.get('prompt')
+    agent_key = data.get('agentKey')
+    app_id = data.get('appId')
+    chat_history = data.get('chatHistory')
+    client = broadscope_bailian.AccessTokenClient(access_key_id=access_key_id, access_key_secret=access_key_secret,
+                                                    agent_key=agent_key)
+    token = client.get_token()
+    resp = broadscope_bailian.Completions(token=token).create(
+        app_id=app_id,
+        prompt=prompt,
+        history=chat_history,
+    )
+    if not resp.get("Success"):
+        print("failed to create completion, request_id: %s, code: %s, message: %s" %
+                (resp.get("RequestId"), resp.get("Code"), resp.get("Message")))
+        return jsonify({'errorMsg':resp.get("Message")})
+    else:
+        print("request_id: %s, text: %s" % (resp.get("RequestId"), resp.get("Data", {}).get("Text")))
+        doc_references = resp.get("Data", {}).get("DocReferences")
+        if doc_references is not None and len(doc_references) > 0:
+            print("doc ref: %s" % doc_references[0].get("DocName"))
+        return resp.get("Data", {}).get("Text")
 if __name__ == '__main__':
     app.run(debug=True,port=8766,host='0.0.0.0')
