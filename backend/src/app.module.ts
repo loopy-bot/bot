@@ -1,3 +1,4 @@
+import { mysqlConfig } from './../config';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -7,12 +8,8 @@ import { UserModule } from './user/user.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
+      ...mysqlConfig,
       type: 'mysql',
-      host: '123.60.1.214',
-      port: 3306,
-      username: 'root',
-      password: '123456',
-      database: 'wx_bot',
       synchronize: true,
       logging: true,
       poolSize: 10,
