@@ -1,8 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { HttpExceptionFilter } from './middleware/http-exception.filter';
+import { TransformInterceptor } from './middleware/transform.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  app.enableCors();
+  app.useGlobalFilters(new HttpExceptionFilter()); // 异常过滤器
+  app.useGlobalInterceptors(new TransformInterceptor()); // 响应拦截
+  await app.listen(4433);
 }
 bootstrap();
