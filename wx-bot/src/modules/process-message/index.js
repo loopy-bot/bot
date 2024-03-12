@@ -3,10 +3,6 @@ import { FileBox } from 'file-box';
 import * as T from '../../services/tianapi/index.js';
 
 const { assembleMessage } = createChat();
-// const { assembleMessage } = createRole({
-//   appId: 'xxx',
-//   agentKey: 'xxx',
-// });
 const replyAudio = createAudioReply();
 const replyImage = createDraw();
 const matchQuestion = {
@@ -132,37 +128,3 @@ export const createProcessMessage = (bot) => {
   }
   return handleMessage;
 };
-
-// test
-const test = () => {
-  assembleMessage(1, '你会什么', (data) => {
-    console.log('回答：', data);
-  });
-  assembleMessage(2, '5 + 1多少', (data) => {
-    console.log('回答：', data);
-  });
-  assembleMessage(2, '4 + 1多少', (data) => {
-    console.log('回答：', data);
-  });
-  assembleMessage(1, '随机来个小点', (data) => {
-    console.log('回答：', data);
-  });
-  assembleMessage(5, '3 + 1多少', (data) => {
-    console.log('回答：', data);
-  });
-};
-// test();
-const a = (text) =>
-  reply(
-    '根据以下文本判断本次询问属于星座,天气,功能,无法推测中的哪一个，只需要单独回复给我，不需要过多解释，比如：判断为询问星座时，返回星座，判断为询问天气时返回天气，无法判断则返回无法推测即可，内容如下：',
-    text,
-  ).then((res) => console.log(res));
-// a("水瓶呢");
-// a("水瓶呢");
-// a("水瓶呢");
-// a("水瓶呢");
-// a("长沙太阳好吗");
-// a("长沙太阳好吗");
-// a("长沙太阳好吗");
-// a("长沙太阳好吗");
-// a("长沙太阳好吗");
