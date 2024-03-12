@@ -4,9 +4,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { RoomModule } from './room/room.module';
 import { TaskModule } from './task/task.module';
 import { AliAppModule } from './ali-app/ali-app.module';
+import { WxResourceModule } from './wx-resource/wx-resource.module';
 
 @Module({
   imports: [
@@ -18,9 +18,9 @@ import { AliAppModule } from './ali-app/ali-app.module';
       connectorPackage: 'mysql2',
       entities: [__dirname + '/**/entities/*.entity{.js,.ts}'],
     }),
-    RoomModule,
     TaskModule,
     AliAppModule,
+    WxResourceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
