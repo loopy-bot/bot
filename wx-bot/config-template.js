@@ -4,7 +4,7 @@ export const AI_MODAL = "xxx"; // 切换不同模型，目前只对阿里的支�
 export const QWEN_KEY = "sk-xxx"; // 阿里的apikey
 export const OPENAI_KEY = "sk-xxx"; 
 export const GEMINI_KEY = "xxx";
-
+export const TIAN_KEY = 'xxx';
 // 邮箱配置
 export const mailConfig =  {
 	auth:{

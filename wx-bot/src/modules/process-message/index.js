@@ -2,11 +2,11 @@ import { createChat, reply, createAudioReply, createDraw, createRole } from '../
 import { FileBox } from 'file-box';
 import * as T from '../../services/tianapi/index.js';
 
-// const { assembleMessage } = createChat();
-const { assembleMessage } = createRole({
-  appId: '21dedb36a6d2416f93885abf5bc08f1a',
-  agentKey: '305253770b4b4d409bb9d1dc4807427b_p_efm',
-});
+const { assembleMessage } = createChat();
+// const { assembleMessage } = createRole({
+//   appId: 'xxx',
+//   agentKey: 'xxx',
+// });
 const replyAudio = createAudioReply();
 const replyImage = createDraw();
 const matchQuestion = {

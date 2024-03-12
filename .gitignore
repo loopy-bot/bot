@@ -34,7 +34,7 @@ dist-electron
 # config
 config.js
 config.json
-
+config.ts
 # Logs
 logs
 *.log
