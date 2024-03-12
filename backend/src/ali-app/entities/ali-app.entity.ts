@@ -1,14 +1,18 @@
 import { BaseEntity } from '../../baseClass/baseEntity';
-import { Entity, Column } from 'typeorm';
+import { Entity } from 'typeorm';
+import { Column } from '../../decorators/createColumn';
 
 @Entity()
 export class AliApp extends BaseEntity {
-  @Column()
+  @Column({ isRequired: true })
   appId: string;
-  @Column()
+
+  @Column({ isRequired: true })
   agentKey: string;
-  @Column()
+
+  @Column({ isRequired: true })
   name: string;
-  @Column()
-  description: string;
+
+  @Column({ isRequired: false, nullable: true })
+  description?: string;
 }

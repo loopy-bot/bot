@@ -33,7 +33,7 @@ export class AliAppController {
 
   @Delete(':id')
   @logMethodName
-  async delete(@Param('id') id: string): Promise<void> {
+  async delete(@Param('id') id: string): Promise<boolean> {
     return this.aliAppService.delete(id);
   }
 }
