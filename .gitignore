@@ -32,9 +32,9 @@ room.db
 dist-electron
 
 # config
-config.js
-config.ts
-config.json
+# config.js
+# config.ts
+# config.json
 
 
 # Logs
