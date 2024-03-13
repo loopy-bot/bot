@@ -1,6 +1,5 @@
 import { WechatyBuilder } from 'wechaty';
 import { startScheduledTasks } from './modules/scheduled-tasks/index.js';
-// import { sendMail, sendQrcode } from './utils/email.js';
 import { createProcessMessage } from './modules/process-message/index.js';
 
 let name = 'loopy_bot';
@@ -20,17 +19,19 @@ bot
     console.log(`User ${user} logged in`);
   })
   .on('ready', async () => {
+    // 开启定时任务
     // startScheduledTasks(bot);
+    console.log('ready');
   })
   .on('logout', () => {
-    sendMail('logout', `您的账户已经登出账户！`);
+    console.log('logout');
   })
   .on('room-join', async (room, inviteeList, inviter) => {
     const nameList = inviteeList.map((i) => `@${i.name()}`).join(',');
     room.say(`欢迎${nameList}🤪加入🎉${await room.topic()}🎉，一起来开启变强之旅🧑‍🦲\n\n哇呜！有问题看群公告嗷🧸`);
   })
   .on('error', (error) => {
-    sendMail('error', JSON.stringify(error));
+    console.warn(error);
   })
   .on('message', async (message) => {
     if (await message.mentionSelf()) {
