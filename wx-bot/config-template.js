@@ -1,4 +1,5 @@
 // 模型配置
+
 export const AI_MODAL = 'qwen'; // 切换不同模型，目前只对阿里的支持多轮对话
 
 export const TIAN_KEY = 'xxx'; // 天行数据key-https://www.tianapi.com/console/
@@ -6,6 +7,7 @@ export const TIAN_KEY = 'xxx'; // 天行数据key-https://www.tianapi.com/consol
 // 下面的key基本上没啥用，也只能调用一下基本的回复，并不能实现其他功能
 export const OPENAI_KEY = 'sk-xxx'; // openai key
 export const GEMINI_KEY = 'xxx'; // gemini key
+
 
 // 邮箱配置
 export const mailConfig = {

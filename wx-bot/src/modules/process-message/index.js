@@ -2,6 +2,7 @@ import { createChat, reply, createAudioReply, createDraw, createRole } from '../
 import { FileBox } from 'file-box';
 import * as T from '../../services/tianapi/index.js';
 
+
 const { assembleMessage } = createChat();
 const replyAudio = createAudioReply();
 const replyImage = createDraw();
