@@ -6,25 +6,26 @@ import { Room } from 'src/wx-resource/entities/room.entity';
 import { Plugin } from 'src/plugins/entities/plugin.entity';
 
 @Entity()
-export class Task extends BaseEntity {
+export class App extends BaseEntity {
   @Column({ isRequired: true })
   name: string;
-
-  @Column({ isRequired: true })
-  time?: number;
 
   @Column({ isRequired: false, nullable: true })
   description?: string;
 
-  @Column({ isRequired: true })
-  text?: string;
+  @Column({ isRequired: false, nullable: true })
+  introduction?: string;
 
   @Column({ isRequired: false, nullable: true })
-  count?: number;
+  model?: string;
 
-  @ManyToMany(() => Friend, (friend) => friend.tasks)
+  @OneToMany(() => Friend, (user) => user.app)
   friends: Friend[];
 
-  @ManyToMany(() => Room, (room) => room.tasks)
-  rooms: Room[];
+  @OneToMany(() => Room, (user) => user.app)
+  rooms: Friend[];
+
+  @ManyToMany(() => Plugin)
+  @JoinTable()
+  plugins: Plugin[];
 }

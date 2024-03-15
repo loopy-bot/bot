@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TaskModule } from './task/task.module';
 import { AliAppModule } from './ali-app/ali-app.module';
 import { WxResourceModule } from './wx-resource/wx-resource.module';
+import { PluginsModule } from './plugins/plugins.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { WxResourceModule } from './wx-resource/wx-resource.module';
     TaskModule,
     AliAppModule,
     WxResourceModule,
+    PluginsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

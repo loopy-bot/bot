@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AliAppService } from './ali-app.service';
+import { AliAppService } from './app.service';
 
 describe('AliAppService', () => {
   let service: AliAppService;
