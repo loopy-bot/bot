@@ -3,7 +3,6 @@ import { Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import { Column } from '../../common/decorators/createColumn';
 import { Friend } from 'src/wx-resource/entities/friend.entity';
 import { Room } from 'src/wx-resource/entities/room.entity';
-import { Plugin } from 'src/plugins/entities/plugin.entity';
 
 @Entity()
 export class Task extends BaseEntity {
@@ -23,8 +22,10 @@ export class Task extends BaseEntity {
   count?: number;
 
   @ManyToMany(() => Friend, (friend) => friend.tasks)
+  @JoinTable()
   friends: Friend[];
 
   @ManyToMany(() => Room, (room) => room.tasks)
+  @JoinTable()
   rooms: Room[];
 }

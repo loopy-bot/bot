@@ -1,7 +1,10 @@
+import axios from 'axios';
 import { App } from 'src/app/entities/app.entity';
 import { BaseEntity } from 'src/common/baseClass/baseEntity';
 import { Column } from 'src/common/decorators/createColumn';
-import { ManyToMany } from 'typeorm';
+import { Entity, JoinTable, ManyToMany } from 'typeorm';
+
+@Entity()
 export class Plugin extends BaseEntity {
   @Column({ isRequired: true })
   name: string;
@@ -15,15 +18,17 @@ export class Plugin extends BaseEntity {
   method: 'POST' | 'GET';
 
   @Column({ isRequired: true })
-  params: Record<string, any>;
-
-  @Column({ isRequired: true })
-  response: {
-    code: number;
-    msg: string;
-    data: Record<string, any>;
-  };
+  responseType: 'json' | 'arraybuffer';
 
   @ManyToMany(() => App)
   apps: App[];
+
+  async reply(text: string) {
+    return axios({
+      url: this.url,
+      method: this.method,
+      params: { text },
+      headers: { responseType: this.responseType },
+    });
+  }
 }

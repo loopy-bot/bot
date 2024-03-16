@@ -5,7 +5,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { TaskModule } from './task/task.module';
-import { AliAppModule } from './ali-app/ali-app.module';
+import { AppModule as App } from './app/app.module';
 import { WxResourceModule } from './wx-resource/wx-resource.module';
 import { PluginsModule } from './plugins/plugins.module';
 
@@ -16,13 +16,15 @@ import { PluginsModule } from './plugins/plugins.module';
       type: 'mysql',
       synchronize: true,
       poolSize: 10,
+      logging: true,
       connectorPackage: 'mysql2',
       entities: [__dirname + '/**/entities/*.entity{.js,.ts}'],
     }),
-    TaskModule,
-    AliAppModule,
-    WxResourceModule,
+
+    App,
     PluginsModule,
+    TaskModule,
+    WxResourceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
