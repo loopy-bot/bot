@@ -33,7 +33,5 @@ bot
   .on("error", (error) => {
     console.warn(error);
   })
-  .on("message", async (message) => {
-    handleMessage(message);
-  })
+  .on("message", async (message) => {})
   .start();
