@@ -1,1 +1,0 @@
-export type ModeType = "horizontal" | "vertical" | "pop" | "popButton";
