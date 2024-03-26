@@ -1,20 +1,22 @@
 import { WechatyBuilder } from "wechaty";
 import { uploadWxData } from "./core/service.js";
 import { extractKeyData } from "./core/extract-key-data.js";
+import qrcodeTerminal from "qrcode-terminal";
 
 let name = "loopy_bot";
 let bot = "";
-let handleMessage;
 bot = WechatyBuilder.build({
   name, // generate xxxx.memory-card.json and save login data for the next login
   puppet: "wechaty-puppet-wechat4u",
 });
 
 bot
-  .on("scan", (qrcode, status) => {
-    console.log(`https://wechaty.js.org/qrcode/${encodeURIComponent(qrcode)}`);
+  .on("scan", (qrcode) => {
+    qrcodeTerminal.generate(qrcode, { small: true });
   })
-  .on("login", (user) => {})
+  .on("login", (user) => {
+    console.log(`${user.name()} logged`);
+  })
   .on("ready", async () => {
     extractKeyData(bot)
       .then(uploadWxData)

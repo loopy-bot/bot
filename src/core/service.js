@@ -1,36 +1,51 @@
-import axios from 'axios';
-
-const request = ({ url, method, data, headers }) => {
+import axios from "axios";
+const baseUrl = "http://127.0.0.1:4433";
+const request = ({ url, method = "post", data, headers }) => {
   return axios({
-    url,
+    url: baseUrl + url,
     method,
     data,
     headers,
   })
     .then((response) => {
       // Handle the response however you prefer here
-      console.log('Data:', response.data);
-      return response.data;
+
+      return response.data?.data;
     })
     .catch((error) => {
       // Error handling
-      console.error('Error:', error.response ? error.response.data : error.message);
+      console.error(
+        "Error:",
+        error.response ? error.response.data : error.message
+      );
       throw error; // Re-throw the error for further handling if necessary
     });
 };
 
-export const reply = (params) => {
+export const chat = (params) => {
   return request({
-    url: 'http://127.0.0.1:4433/reply',
-    method: 'post',
+    url: "/wx/message",
+    method: "post",
     data: params,
   });
 };
 
 export const uploadWxData = (params) => {
   return request({
-    url: 'http://127.0.0.1:4433/resource/upload',
-    method: 'post',
+    url: "/wx/resource/upload",
     data: params,
+  });
+};
+
+export const getTasks = () => {
+  return request({
+    url: "/wx/task/list",
+  });
+};
+
+export const activeTask = (id) => {
+  return request({
+    url: "/task/active",
+    data: { id },
   });
 };

@@ -5,17 +5,16 @@ export async function extractKeyData(bot) {
   ]); // Get all contacts
 
   const contactsData = contactList
+    .filter((i) => i.payload.friend)
     .map((contact) => ({
-      id: contact.id,
+      wxId: contact.id,
       name: contact.payload.name,
       alias: contact.payload.alias,
-      friend: contact.payload.friend,
-    }))
-    .filter((i) => i.friend);
+    }));
 
   const roomsData = roomList.map(async (room) => ({
-    id: room.id,
-    topic: await room.topic(),
+    wxId: room.id,
+    name: await room.topic(),
     memberCount: (await room.memberAll()).length, // Use memberAll() to get all members and count them
   }));
 
