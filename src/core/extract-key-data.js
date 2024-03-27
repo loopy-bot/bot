@@ -23,6 +23,8 @@ export async function extractKeyData(bot) {
     return {
       friends: contactsData,
       rooms: resolvedRoomsData,
+      contactList: contactList.filter((i) => i.payload.friend),
+      roomList,
     };
   });
 }

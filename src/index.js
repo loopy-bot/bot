@@ -2,6 +2,7 @@ import { WechatyBuilder } from "wechaty";
 import { uploadWxData } from "./core/service.js";
 import { extractKeyData } from "./core/extract-key-data.js";
 import qrcodeTerminal from "qrcode-terminal";
+import { initTask } from "./core/schedule-task.js";
 
 let name = "loopy_bot";
 let bot = "";
@@ -17,9 +18,12 @@ bot
   .on("login", (user) => {
     console.log(`${user.name()} logged`);
   })
-  .on("ready", async () => {
+  .on("ready", async (e) => {
     extractKeyData(bot)
-      .then(uploadWxData)
+      .then(({ contactList, roomList, ...rest }) => {
+        uploadWxData(rest);
+        initTask(bot, contactList, roomList);
+      })
       .catch((error) => {
         console.error("Failed to extract key data:", error);
       });
@@ -35,5 +39,5 @@ bot
   .on("error", (error) => {
     console.warn(error);
   })
-  .on("message", async (message) => {})
+  .on("message", async (msg) => {})
   .start();
