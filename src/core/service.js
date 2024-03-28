@@ -14,10 +14,7 @@ const request = ({ url, method = "post", data, headers }) => {
     })
     .catch((error) => {
       // Error handling
-      console.error(
-        "Error:",
-        error.response ? error.response.data : error.message
-      );
+      console.error("Error:", error.response ? error.response.data : error.message);
       throw error; // Re-throw the error for further handling if necessary
     });
 };
