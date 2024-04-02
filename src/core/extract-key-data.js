@@ -16,10 +16,14 @@ export async function extractKeyData(bot) {
   }));
 
   // Use Promise.all to wait for all room data to be resolved
-  return Promise.all(roomsData).then((resolvedRoomsData) => {
-    return {
-      friends: contactsData,
-      rooms: resolvedRoomsData,
-    };
-  });
+  return Promise.all(roomsData)
+    .then((resolvedRoomsData) => {
+      return {
+        friends: contactsData,
+        rooms: resolvedRoomsData,
+      };
+    })
+    .catch((error) => {
+      console.error("Failed to extract key data:", error);
+    });
 }

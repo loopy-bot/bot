@@ -34,17 +34,21 @@ export const handleMessage = async (bot, msg) => {
   const room = msg.room();
 
   const replyMessage = async (res) => {
-    if (res.type === "text") {
-      if (room) {
-        msg.say(`@${contact.name()}\n${res.text}`);
-      } else {
-        msg.say(res.text);
+    try {
+      if (res.type === "text") {
+        if (room) {
+          msg.say(`@${contact.name()}\n${res.text}`);
+        } else {
+          msg.say(res.text);
+        }
       }
-    }
-    if (res.type === "file") {
-      const file = await getFile(res.fileData.url);
-      const fileBox = FileBox.fromBuffer(file, res.fileData.name);
-      msg.say(fileBox);
+      if (res.type === "file") {
+        const file = await getFile(res.fileData.url);
+        const fileBox = FileBox.fromBuffer(file, res.fileData.name);
+        msg.say(fileBox);
+      }
+    } catch (error) {
+      console.error(`回复消息时发生错误: ${error}`);
     }
   };
   if (room) {

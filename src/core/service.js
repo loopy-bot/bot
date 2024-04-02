@@ -50,7 +50,7 @@ export const activeTask = (id) => {
 export const getFile = (url) => {
   return axios({
     method: "get",
-    url: "http://123.60.1.214:9002" + url,
+    url: "http://123.60.1.214:8082" + url,
     responseType: "arraybuffer", // 重要
   }).then((res) => res.data);
 };
