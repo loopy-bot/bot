@@ -7,15 +7,15 @@ let wx = {
   room: null,
   find(type, name) {
     if (type === "room") {
-      return this.room.find((i) => i.name === name).entity;
+      return this.room.find((i) => i.name === name)?.entity;
     } else {
-      return this.contact.find((i) => i.name === name).entity;
+      return this.contact.find((i) => i.name === name)?.entity;
     }
   },
 };
 const jobsMap = new Map();
 
-const pollInterval = 1000 * 60 * 3; // 轮询间隔设为3分钟
+const pollInterval = 1000 * 60 * 10; // 轮询间隔设为3分钟
 
 const pollForTaskUpdates = async () => {
   const res = await getTasks(); // 假设这个函数会返回最新的任务数组
@@ -23,7 +23,7 @@ const pollForTaskUpdates = async () => {
   const diff = async (updatedTasks, type) => {
     // 取消不在更新任务列表中的任务
     for (const [jobId, job] of jobsMap) {
-      if (!updatedTasks.find((task) => task.name + task.id === jobId)) {
+      if (jobId.includes(type) && !updatedTasks.find((task) => `${type}_${task.wxName}_${task.id}` === jobId)) {
         job.cancel();
         jobsMap.delete(jobId);
         console.log(`任务 ${jobId} 已取消`);
@@ -32,17 +32,19 @@ const pollForTaskUpdates = async () => {
 
     // 添加或更新任务
     for (const task of updatedTasks) {
-      const existingJob = jobsMap.get(`${task.name}_${task.id}`);
+      const existingJob = jobsMap.get(`${type}_${task.wxName}_${task.id}`);
       if (existingJob) {
         // 如果任务时间有更新，则重置任务
-        if (existingJob.hash !== task.time + task.count) {
+        if (existingJob.hash !== task.time + ":" + task.count) {
           existingJob.reschedule(task.time);
-          console.log(`任务 ${task.name}_${task.id} 已更新时间`);
+          existingJob.hash = task.time + ":" + task.count;
+          jobsMap.set(`${type}_${task.wxName}_${task.id}`, existingJob);
+          console.log(`任务 ${type}_${task.wxName}_${task.id} 已更新时间`);
         }
       } else {
         // 如果是新任务，则添加
-        await initTaskForEntity(type, task.name, task);
-        console.log(`任务 ${task.name}_${task.id} 已添加`);
+        await initTaskForEntity(type, task.wxName, task);
+        console.log(`任务 ${type}_${task.wxName}_${task.id} 已添加`);
       }
     }
   };
@@ -73,8 +75,8 @@ const initTaskForEntity = async (type, name, task) => {
     }
   });
   // 记录cron用来diff
-  job.hash = task.time + task.count;
-  jobsMap.set(`${name}_${task.id}`, job);
+  job.hash = task.time + ":" + task.count;
+  jobsMap.set(`${type}_${name}_${task.id}`, job);
 
   //test
   // const res = await activeTask(task.id);
